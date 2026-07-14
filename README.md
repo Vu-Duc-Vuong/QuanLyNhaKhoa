@@ -1,1 +1,2 @@
 # QuanLyNhaKhoa
+chạy mvn test
