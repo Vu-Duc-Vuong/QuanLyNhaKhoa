@@ -1,0 +1,10 @@
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/QuanLyNhaKhoaApplication.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/config/SecurityConfig.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/controller/AuthController.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/dto/LoginRequest.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/dto/RegisterRequest.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/entity/Role.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/entity/User.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/repository/UserRepository.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/service/AuthService.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/service/impl/AuthServiceImpl.java
