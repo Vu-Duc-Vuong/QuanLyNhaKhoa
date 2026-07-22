@@ -1,13 +1,83 @@
 package com.qlnhakhoa.patient.controller;
 
+import com.qlnhakhoa.patient.entity.Patient;
+import com.qlnhakhoa.patient.service.PatientService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 public class PatientController {
 
+
+    @Autowired
+    private PatientService patientService;
+
+
+
+    // Danh sách bệnh nhân
     @GetMapping("/patient")
-    public String patientList() {
+    public String patientList(Model model) {
+
+        model.addAttribute("patients",
+                patientService.getAllPatients());
+
         return "patient/list";
     }
+
+
+
+    // Mở form thêm bệnh nhân
+    @GetMapping("/patient/add")
+    public String addPatientPage(Model model) {
+
+        model.addAttribute("patient", new Patient());
+
+        return "patient/add";
+    }
+
+
+
+    // Lưu bệnh nhân
+    @PostMapping("/patient/save")
+    public String savePatient(@ModelAttribute Patient patient) {
+
+        patientService.savePatient(patient);
+
+        return "redirect:/patient";
+    }
+
+
+
+    // Xóa bệnh nhân
+    @GetMapping("/patient/delete/{id}")
+    public String deletePatient(@PathVariable Long id) {
+
+        patientService.deletePatient(id);
+
+        return "redirect:/patient";
+    }
+
+
+
+    // Mở form sửa bệnh nhân (chuẩn bị cho bước tiếp theo)
+    @GetMapping("/patient/edit/{id}")
+    public String editPatient(
+            @PathVariable Long id,
+            Model model) {
+
+
+        Patient patient =
+                patientService.getPatientById(id);
+
+
+        model.addAttribute("patient", patient);
+
+
+        return "patient/edit";
+    }
+
 }

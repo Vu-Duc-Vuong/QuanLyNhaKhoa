@@ -17,6 +17,7 @@
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/auth/service/impl/AuthServiceImpl.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/auth/service/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/config/SecurityConfig.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/home/controller/HomeController.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/invoice/controller/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/invoice/entity/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/invoice/package-info.java
@@ -27,14 +28,11 @@
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/medicine/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/medicine/repository/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/medicine/service/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/controller/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/dto/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/entity/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/repository/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/service/package-info.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/controller/PatientController.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/entity/Patient.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/repository/PatientRepository.java
+/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/patient/service/PatientService.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/report/controller/package-info.java
-/workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/report/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/report/service/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/treatment/controller/package-info.java
 /workspaces/QuanLyNhaKhoa/src/main/java/com/qlnhakhoa/treatment/entity/package-info.java
