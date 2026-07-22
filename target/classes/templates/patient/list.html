@@ -22,12 +22,39 @@
 
 
 
+    <!-- Thêm bệnh nhân -->
     <a th:href="@{/patient/add}" 
        class="btn btn-primary mb-3">
 
         + Thêm bệnh nhân
 
     </a>
+
+
+
+    <!-- Tìm kiếm bệnh nhân -->
+    <form th:action="@{/patient/search}"
+          method="get"
+          class="d-flex mb-3">
+
+
+        <input type="text"
+               name="keyword"
+               th:value="${keyword}"
+               class="form-control me-2"
+               placeholder="Nhập mã BN, họ tên hoặc SĐT">
+
+
+        <button class="btn btn-success">
+
+            Tìm kiếm
+
+        </button>
+
+
+    </form>
+
+
 
 
 
@@ -81,7 +108,7 @@
             <td>
 
 
-                <!--sửa -->
+                <!-- Sửa -->
 
                 <a th:href="@{/patient/edit/{id}(id=${patient.id})}"
                    class="btn btn-warning btn-sm">
@@ -92,7 +119,7 @@
 
 
 
-                <!-- xóa -->
+                <!-- Xóa -->
 
                 <a th:href="@{/patient/delete/{id}(id=${patient.id})}"
                    class="btn btn-danger btn-sm"

@@ -56,4 +56,18 @@ public class PatientService {
     }
 
 
+
+    // Tìm kiếm bệnh nhân
+    public List<Patient> searchPatient(String keyword){
+
+        return patientRepository
+                .findByPatientCodeContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrPhoneContainingIgnoreCase(
+                        keyword,
+                        keyword,
+                        keyword
+                );
+
+    }
+
+
 }

@@ -1,7 +1,9 @@
 package com.qlnhakhoa.patient.controller;
 
+
 import com.qlnhakhoa.patient.entity.Patient;
 import com.qlnhakhoa.patient.service.PatientService;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,10 @@ public class PatientController {
     @GetMapping("/patient")
     public String patientList(Model model) {
 
-        model.addAttribute("patients",
-                patientService.getAllPatients());
+        model.addAttribute(
+                "patients",
+                patientService.getAllPatients()
+        );
 
         return "patient/list";
     }
@@ -34,7 +38,10 @@ public class PatientController {
     @GetMapping("/patient/add")
     public String addPatientPage(Model model) {
 
-        model.addAttribute("patient", new Patient());
+        model.addAttribute(
+                "patient",
+                new Patient()
+        );
 
         return "patient/add";
     }
@@ -43,9 +50,12 @@ public class PatientController {
 
     // Lưu bệnh nhân
     @PostMapping("/patient/save")
-    public String savePatient(@ModelAttribute Patient patient) {
+    public String savePatient(
+            @ModelAttribute Patient patient) {
+
 
         patientService.savePatient(patient);
+
 
         return "redirect:/patient";
     }
@@ -54,16 +64,19 @@ public class PatientController {
 
     // Xóa bệnh nhân
     @GetMapping("/patient/delete/{id}")
-    public String deletePatient(@PathVariable Long id) {
+    public String deletePatient(
+            @PathVariable Long id) {
+
 
         patientService.deletePatient(id);
+
 
         return "redirect:/patient";
     }
 
 
 
-    // Mở form sửa bệnh nhân (chuẩn bị cho bước tiếp theo)
+    // Mở form sửa bệnh nhân
     @GetMapping("/patient/edit/{id}")
     public String editPatient(
             @PathVariable Long id,
@@ -74,10 +87,38 @@ public class PatientController {
                 patientService.getPatientById(id);
 
 
-        model.addAttribute("patient", patient);
+        model.addAttribute(
+                "patient",
+                patient
+        );
 
 
         return "patient/edit";
     }
+
+
+
+    // Tìm kiếm bệnh nhân
+    @GetMapping("/patient/search")
+    public String searchPatient(
+            @RequestParam("keyword") String keyword,
+            Model model) {
+
+
+        model.addAttribute(
+                "patients",
+                patientService.searchPatient(keyword)
+        );
+
+
+        model.addAttribute(
+                "keyword",
+                keyword
+        );
+
+
+        return "patient/list";
+    }
+
 
 }
