@@ -48,6 +48,7 @@ public class AppointmentController {
 
 
 
+
     // Mở form thêm lịch hẹn
     @GetMapping("/appointment/add")
     public String addAppointmentPage(Model model){
@@ -73,7 +74,8 @@ public class AppointmentController {
 
 
 
-    // Lưu lịch hẹn + kiểm tra trùng
+
+    // Lưu thêm + sửa lịch hẹn
     @PostMapping("/appointment/save")
     public String saveAppointment(
             @ModelAttribute Appointment appointment,
@@ -82,7 +84,7 @@ public class AppointmentController {
 
 
 
-        // kiểm tra trùng ngày + giờ
+        // kiểm tra trùng lịch
         boolean exists =
                 appointmentService.checkDuplicate(
                         appointment.getAppointmentDate(),
@@ -119,7 +121,6 @@ public class AppointmentController {
 
 
 
-
         appointment.setPatient(
                 patientService.getPatientById(patientId)
         );
@@ -135,19 +136,71 @@ public class AppointmentController {
     }
 
 
-// Đổi trạng thái lịch hẹn
-@GetMapping("/appointment/status/{id}/{status}")
-public String updateStatus(
-        @PathVariable Long id,
-        @PathVariable String status){
 
 
-    appointmentService.updateStatus(id, status);
 
 
-    return "redirect:/appointment";
 
-}
+
+    // Mở form sửa lịch hẹn
+    @GetMapping("/appointment/edit/{id}")
+    public String editAppointment(
+            @PathVariable Long id,
+            Model model){
+
+
+
+        Appointment appointment =
+                appointmentService.getAppointmentById(id);
+
+
+
+        model.addAttribute(
+                "appointment",
+                appointment
+        );
+
+
+
+        model.addAttribute(
+                "patients",
+                patientService.getAllPatients()
+        );
+
+
+
+        return "appointment/edit";
+
+    }
+
+
+
+
+
+
+
+    // Đổi trạng thái lịch hẹn
+    @GetMapping("/appointment/status/{id}/{status}")
+    public String updateStatus(
+            @PathVariable Long id,
+            @PathVariable String status){
+
+
+
+        appointmentService.updateStatus(
+                id,
+                status
+        );
+
+
+        return "redirect:/appointment";
+
+    }
+
+
+
+
+
 
 
     // Xóa lịch hẹn
@@ -164,7 +217,6 @@ public String updateStatus(
         return "redirect:/appointment";
 
     }
-
 
 
 

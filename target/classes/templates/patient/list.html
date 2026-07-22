@@ -2,149 +2,234 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Danh sách bệnh nhân</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
-          rel="stylesheet">
+<meta charset="UTF-8">
+
+<title>Danh sách bệnh nhân</title>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
 </head>
+
 
 
 <body>
 
 
-<div class="container mt-5">
 
+<!-- Header -->
+<div th:replace="~{layout/header}"></div>
 
-    <h2 class="mb-4">
-        Danh sách bệnh nhân
-    </h2>
 
 
 
-    <!-- Thêm bệnh nhân -->
-    <a th:href="@{/patient/add}" 
-       class="btn btn-primary mb-3">
+<div class="d-flex">
 
-        + Thêm bệnh nhân
 
-    </a>
 
+    <!-- Sidebar -->
+    <div th:replace="~{layout/sidebar}"></div>
 
 
-    <!-- Tìm kiếm bệnh nhân -->
-    <form th:action="@{/patient/search}"
-          method="get"
-          class="d-flex mb-3">
 
 
-        <input type="text"
-               name="keyword"
-               th:value="${keyword}"
-               class="form-control me-2"
-               placeholder="Nhập mã BN, họ tên hoặc SĐT">
+    <!-- Nội dung chính -->
 
+    <div class="container mt-4">
 
-        <button class="btn btn-success">
 
-            Tìm kiếm
 
-        </button>
+        <h2 class="mb-4">
 
+            Danh sách bệnh nhân
 
-    </form>
+        </h2>
 
 
 
 
+        <!-- Thêm bệnh nhân -->
 
-    <table class="table table-bordered table-hover">
+        <a th:href="@{/patient/add}"
+           class="btn btn-primary mb-3">
 
 
-        <thead class="table-dark">
+            + Thêm bệnh nhân
 
-        <tr>
 
-            <th>Mã BN</th>
+        </a>
 
-            <th>Họ tên</th>
 
-            <th>SĐT</th>
 
-            <th>Giới tính</th>
 
-            <th>Địa chỉ</th>
 
-            <th>Chức năng</th>
+        <!-- Tìm kiếm -->
 
-        </tr>
+        <form th:action="@{/patient/search}"
+              method="get"
+              class="d-flex mb-3">
 
-        </thead>
 
 
+            <input type="text"
+                   name="keyword"
+                   th:value="${keyword}"
+                   class="form-control me-2"
+                   placeholder="Nhập mã BN, họ tên hoặc SĐT">
 
-        <tbody>
 
 
-        <tr th:each="patient : ${patients}">
+            <button class="btn btn-success">
 
+                Tìm kiếm
 
-            <td th:text="${patient.patientCode}"></td>
+            </button>
 
 
-            <td th:text="${patient.fullName}"></td>
 
+        </form>
 
-            <td th:text="${patient.phone}"></td>
 
 
-            <td th:text="${patient.gender}"></td>
 
 
-            <td th:text="${patient.address}"></td>
 
+        <table class="table table-bordered table-hover">
 
 
-            <td>
 
+            <thead class="table-dark">
 
-                <!-- Sửa -->
 
-                <a th:href="@{/patient/edit/{id}(id=${patient.id})}"
-                   class="btn btn-warning btn-sm">
+            <tr>
 
-                    Sửa
+                <th>Mã BN</th>
 
-                </a>
+                <th>Họ tên</th>
 
+                <th>SĐT</th>
 
+                <th>Giới tính</th>
 
-                <!-- Xóa -->
+                <th>Địa chỉ</th>
 
-                <a th:href="@{/patient/delete/{id}(id=${patient.id})}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Bạn có chắc muốn xóa bệnh nhân này?')">
+                <th>Chức năng</th>
 
-                    Xóa
 
-                </a>
+            </tr>
 
 
-            </td>
+            </thead>
 
 
-        </tr>
 
 
-        </tbody>
 
 
-    </table>
+            <tbody>
+
+
+
+            <tr th:each="patient : ${patients}">
+
+
+
+                <td th:text="${patient.patientCode}"></td>
+
+
+
+                <td th:text="${patient.fullName}"></td>
+
+
+
+                <td th:text="${patient.phone}"></td>
+
+
+
+                <td th:text="${patient.gender}"></td>
+
+
+
+                <td th:text="${patient.address}"></td>
+
+
+
+
+
+                <td>
+
+
+
+                    <!-- Sửa -->
+
+                    <a th:href="@{/patient/edit/{id}(id=${patient.id})}"
+                       class="btn btn-warning btn-sm">
+
+
+                        Sửa
+
+
+                    </a>
+
+
+
+
+
+
+                    <!-- Xóa -->
+
+
+                    <a th:href="@{/patient/delete/{id}(id=${patient.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc muốn xóa bệnh nhân này?')">
+
+
+                        Xóa
+
+
+                    </a>
+
+
+
+
+                </td>
+
+
+
+
+            </tr>
+
+
+
+            </tbody>
+
+
+
+        </table>
+
+
+
+
+    </div>
+
+
 
 
 </div>
 
 
+
+
+<!-- Footer -->
+
+<div th:replace="~{layout/footer}"></div>
+
+
+
+
 </body>
+
 
 </html>

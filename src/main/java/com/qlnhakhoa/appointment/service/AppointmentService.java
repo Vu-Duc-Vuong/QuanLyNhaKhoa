@@ -74,22 +74,6 @@ public class AppointmentService {
                 );
 
     }
-// Cập nhật trạng thái
-public void updateStatus(Long id, String status){
 
-    Appointment appointment =
-            appointmentRepository.findById(id)
-            .orElse(null);
-
-
-    if(appointment != null){
-
-        appointment.setStatus(status);
-
-        appointmentRepository.save(appointment);
-
-    }
-
-}
 
 }
