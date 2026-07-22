@@ -67,12 +67,50 @@ class="btn btn-primary mb-3">
 
 <td>
 
+
+<a th:if="${a.status == 'Chờ khám'}"
+th:href="@{/appointment/status/{id}/{status}
+(id=${a.id},status='Đã check-in')}"
+class="btn btn-success btn-sm">
+
+Check-in
+
+</a>
+
+
+
+<a th:if="${a.status == 'Đã check-in'}"
+th:href="@{/appointment/status/{id}/{status}
+(id=${a.id},status='Đang khám')}"
+class="btn btn-warning btn-sm">
+
+Bắt đầu khám
+
+</a>
+
+
+
+
+<a th:if="${a.status == 'Đang khám'}"
+th:href="@{/appointment/status/{id}/{status}
+(id=${a.id},status='Hoàn thành')}"
+class="btn btn-primary btn-sm">
+
+Hoàn thành
+
+</a>
+
+
+
+
 <a th:href="@{/appointment/delete/{id}(id=${a.id})}"
-class="btn btn-danger btn-sm">
+class="btn btn-danger btn-sm"
+onclick="return confirm('Bạn có chắc muốn xóa?')">
 
 Xóa
 
 </a>
+
 
 </td>
 

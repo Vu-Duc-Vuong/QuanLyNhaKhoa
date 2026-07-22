@@ -22,6 +22,15 @@ rel="stylesheet">
 <h2>Thêm lịch hẹn</h2>
 
 
+<!-- Hiển thị lỗi trùng lịch -->
+<div th:if="${error}"
+     class="alert alert-danger">
+
+    <span th:text="${error}"></span>
+
+</div>
+
+
 
 <form th:action="@{/appointment/save}"
       method="post">
@@ -83,7 +92,7 @@ rel="stylesheet">
         <input type="date"
        name="appointmentDate"
        class="form-control"
-       min="2020-01-01"
+       min="2026-01-01"
        required>
 
 

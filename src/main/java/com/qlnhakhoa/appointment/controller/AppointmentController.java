@@ -28,6 +28,7 @@ public class AppointmentController {
 
 
 
+
     // Danh sách lịch hẹn
     @GetMapping("/appointment")
     public String appointmentList(Model model){
@@ -72,17 +73,57 @@ public class AppointmentController {
 
 
 
-    // Lưu lịch hẹn
+    // Lưu lịch hẹn + kiểm tra trùng
     @PostMapping("/appointment/save")
     public String saveAppointment(
             @ModelAttribute Appointment appointment,
-            @RequestParam("patientId") Long patientId){
+            @RequestParam("patientId") Long patientId,
+            Model model){
+
+
+
+        // kiểm tra trùng ngày + giờ
+        boolean exists =
+                appointmentService.checkDuplicate(
+                        appointment.getAppointmentDate(),
+                        appointment.getAppointmentTime()
+                );
+
+
+
+        if(exists){
+
+
+            model.addAttribute(
+                    "appointment",
+                    appointment
+            );
+
+
+            model.addAttribute(
+                    "patients",
+                    patientService.getAllPatients()
+            );
+
+
+            model.addAttribute(
+                    "error",
+                    "Lịch hẹn này đã tồn tại!"
+            );
+
+
+            return "appointment/add";
+
+        }
+
+
 
 
 
         appointment.setPatient(
                 patientService.getPatientById(patientId)
         );
+
 
 
         appointmentService.saveAppointment(appointment);
@@ -94,7 +135,19 @@ public class AppointmentController {
     }
 
 
+// Đổi trạng thái lịch hẹn
+@GetMapping("/appointment/status/{id}/{status}")
+public String updateStatus(
+        @PathVariable Long id,
+        @PathVariable String status){
 
+
+    appointmentService.updateStatus(id, status);
+
+
+    return "redirect:/appointment";
+
+}
 
 
     // Xóa lịch hẹn

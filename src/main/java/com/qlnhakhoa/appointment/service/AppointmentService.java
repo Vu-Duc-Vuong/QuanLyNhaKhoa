@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 
 @Service
@@ -57,5 +60,36 @@ public class AppointmentService {
     }
 
 
+
+    // Kiểm tra trùng lịch
+    public boolean checkDuplicate(
+            LocalDate date,
+            LocalTime time){
+
+
+        return appointmentRepository
+                .existsByAppointmentDateAndAppointmentTime(
+                        date,
+                        time
+                );
+
+    }
+// Cập nhật trạng thái
+public void updateStatus(Long id, String status){
+
+    Appointment appointment =
+            appointmentRepository.findById(id)
+            .orElse(null);
+
+
+    if(appointment != null){
+
+        appointment.setStatus(status);
+
+        appointmentRepository.save(appointment);
+
+    }
+
+}
 
 }
