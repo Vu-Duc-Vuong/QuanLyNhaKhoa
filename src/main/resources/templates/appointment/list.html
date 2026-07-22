@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Danh sách lịch hẹn</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<div class="container mt-5">
+
+
+<h2>
+Danh sách lịch hẹn
+</h2>
+
+
+<a href="/appointment/add"
+class="btn btn-primary mb-3">
+
++ Thêm lịch hẹn
+
+</a>
+
+
+
+<table class="table table-bordered">
+
+
+<tr class="table-dark">
+
+<th>Mã lịch</th>
+<th>Bệnh nhân</th>
+<th>Ngày</th>
+<th>Giờ</th>
+<th>Trạng thái</th>
+<th>Chức năng</th>
+
+</tr>
+
+
+
+<tr th:each="a : ${appointments}">
+
+
+<td th:text="${a.appointmentCode}"></td>
+
+
+<td th:text="${a.patient.fullName}"></td>
+
+
+<td th:text="${a.appointmentDate}"></td>
+
+
+<td th:text="${a.appointmentTime}"></td>
+
+
+<td th:text="${a.status}"></td>
+
+
+<td>
+
+<a th:href="@{/appointment/delete/{id}(id=${a.id})}"
+class="btn btn-danger btn-sm">
+
+Xóa
+
+</a>
+
+</td>
+
+
+</tr>
+
+
+</table>
+
+
+</div>
+
+
+</body>
+
+</html>
