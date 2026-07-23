@@ -17,208 +17,163 @@ rel="stylesheet">
 <body>
 
 
-<!-- Header -->
-<div th:replace="~{layout/header}"></div>
+<!-- Navbar -->
 
+<div th:replace="~{layout/sidebar}"></div>
 
 
-<div class="d-flex">
 
 
-    <!-- Sidebar -->
-    <div th:replace="~{layout/sidebar}"></div>
+<div class="container mt-4">
 
 
+    <h2 class="mb-4">
 
+        Danh sách lịch hẹn
 
+    </h2>
 
-    <!-- Nội dung chính -->
-    <div class="container mt-4">
 
 
-        <h2 class="mb-4">
-            Danh sách lịch hẹn
-        </h2>
+    <a th:href="@{/appointment/add}"
+       class="btn btn-primary mb-3">
 
+        + Thêm lịch hẹn
 
+    </a>
 
 
 
-        <a th:href="@{/appointment/add}"
-           class="btn btn-primary mb-3">
 
-            + Thêm lịch hẹn
 
-        </a>
+    <table class="table table-bordered table-hover">
 
 
+        <thead class="table-dark">
 
+        <tr>
 
+            <th>Mã lịch</th>
 
+            <th>Bệnh nhân</th>
 
-        <table class="table table-bordered table-hover">
+            <th>Ngày</th>
 
+            <th>Giờ</th>
 
-            <thead class="table-dark">
+            <th>Trạng thái</th>
 
-            <tr>
+            <th>Chức năng</th>
 
-                <th>Mã lịch</th>
+        </tr>
 
-                <th>Bệnh nhân</th>
 
-                <th>Ngày</th>
+        </thead>
 
-                <th>Giờ</th>
 
-                <th>Trạng thái</th>
 
-                <th>Chức năng</th>
 
-            </tr>
+        <tbody>
 
-            </thead>
 
+        <tr th:each="a : ${appointments}">
 
 
+            <td th:text="${a.appointmentCode}"></td>
 
 
-            <tbody>
+            <td th:text="${a.patient != null ? a.patient.fullName : 'Chưa có'}"></td>
 
 
-            <tr th:each="a : ${appointments}">
+            <td th:text="${a.appointmentDate}"></td>
 
 
-                <td th:text="${a.appointmentCode}"></td>
+            <td th:text="${a.appointmentTime}"></td>
 
 
 
-                <td th:text="${a.patient != null ? a.patient.fullName : 'Chưa có'}"></td>
+            <td>
 
+                <span class="badge bg-info"
+                      th:text="${a.status}">
+                </span>
 
+            </td>
 
-                <td th:text="${a.appointmentDate}"></td>
 
 
 
-                <td th:text="${a.appointmentTime}"></td>
+            <td>
 
 
+                <a th:href="@{/appointment/edit/{id}(id=${a.id})}"
+                   class="btn btn-warning btn-sm">
 
-                <td>
+                    Sửa
 
-                    <span class="badge bg-info"
-                          th:text="${a.status}">
-                    </span>
+                </a>
 
-                </td>
 
 
 
+                <a th:if="${a.status == 'Chờ khám'}"
+                   th:href="@{/appointment/status/{id}/{status}(id=${a.id},status='Đã check-in')}"
+                   class="btn btn-success btn-sm">
 
+                    Check-in
 
+                </a>
 
-                <td>
 
 
-                    <!-- Sửa -->
 
-                    <a th:href="@{/appointment/edit/{id}(id=${a.id})}"
-                       class="btn btn-warning btn-sm">
+                <a th:if="${a.status == 'Đã check-in'}"
+                   th:href="@{/appointment/status/{id}/{status}(id=${a.id},status='Đang khám')}"
+                   class="btn btn-warning btn-sm">
 
-                        Sửa
+                    Bắt đầu khám
 
-                    </a>
+                </a>
 
 
 
 
+                <a th:if="${a.status == 'Đang khám'}"
+                   th:href="@{/appointment/status/{id}/{status}(id=${a.id},status='Hoàn thành')}"
+                   class="btn btn-primary btn-sm">
 
+                    Hoàn thành
 
-                    <!-- Check-in -->
+                </a>
 
-                    <a th:if="${a.status == 'Chờ khám'}"
-                       th:href="@{/appointment/status/{id}/{status}
-                       (id=${a.id},status='Đã check-in')}"
-                       class="btn btn-success btn-sm">
 
-                        Check-in
 
-                    </a>
 
+                <a th:href="@{/appointment/delete/{id}(id=${a.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Bạn có chắc muốn xóa lịch hẹn này?')">
 
+                    Xóa
 
+                </a>
 
 
 
-                    <!-- Bắt đầu khám -->
+            </td>
 
-                    <a th:if="${a.status == 'Đã check-in'}"
-                       th:href="@{/appointment/status/{id}/{status}
-                       (id=${a.id},status='Đang khám')}"
-                       class="btn btn-warning btn-sm">
 
-                        Bắt đầu khám
+        </tr>
 
-                    </a>
 
+        </tbody>
 
 
-
-
-
-                    <!-- Hoàn thành -->
-
-                    <a th:if="${a.status == 'Đang khám'}"
-                       th:href="@{/appointment/status/{id}/{status}
-                       (id=${a.id},status='Hoàn thành')}"
-                       class="btn btn-primary btn-sm">
-
-                        Hoàn thành
-
-                    </a>
-
-
-
-
-
-
-                    <!-- Xóa -->
-
-                    <a th:href="@{/appointment/delete/{id}(id=${a.id})}"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bạn có chắc muốn xóa lịch hẹn này?')">
-
-                        Xóa
-
-                    </a>
-
-
-
-                </td>
-
-
-
-            </tr>
-
-
-            </tbody>
-
-
-        </table>
-
-
-
-
-    </div>
+    </table>
 
 
 </div>
 
 
-
-
-<!-- Footer -->
 
 <div th:replace="~{layout/footer}"></div>
 

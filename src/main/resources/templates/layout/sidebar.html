@@ -1,21 +1,100 @@
-<div class="bg-dark text-white p-3 vh-100" style="width:250px;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-    <h4 class="mb-4">MENU</h4>
+    <div class="container-fluid">
 
-    <a href="/" class="nav-link text-white mb-2"> Dashboard</a>
 
-    <a href="/patient" class="nav-link text-white mb-2"> Bệnh nhân</a>
+        <a class="navbar-brand" href="/">
+            Quản lý Nha khoa
+        </a>
 
-    <a href="/appointment" class="nav-link text-white mb-2"> Lịch hẹn</a>
 
-    <a href="/treatment" class="nav-link text-white mb-2"> Khám bệnh</a>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
 
-    <a href="/medicine" class="nav-link text-white mb-2"> Thuốc</a>
+            <span class="navbar-toggler-icon"></span>
 
-    <a href="/invoice" class="nav-link text-white mb-2"> Hóa đơn</a>
+        </button>
 
-    <a href="/report" class="nav-link text-white mb-2"> Báo cáo</a>
 
-    <a href="/logout" class="nav-link text-white mt-5"> Đăng xuất</a>
 
-</div>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+
+            <ul class="navbar-nav me-auto">
+
+
+                <li class="nav-item">
+                    <a href="/" class="nav-link text-white">
+                        Trang chủ
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/patient" class="nav-link text-white">
+                        Bệnh nhân
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/appointment" class="nav-link text-white">
+                        Lịch hẹn
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/treatment" class="nav-link text-white">
+                        Khám bệnh
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/medicine" class="nav-link text-white">
+                        Thuốc
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/invoice" class="nav-link text-white">
+                        Hóa đơn
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a href="/report" class="nav-link text-white">
+                        Báo cáo
+                    </a>
+                </li>
+
+
+            </ul>
+
+
+            <!-- Hiển thị tài khoản đăng nhập -->
+
+            <span class="text-white me-3">
+
+                <span th:text="${#authentication.name}">
+                    User
+                </span>
+
+            </span>
+
+
+            <a href="/logout" class="btn btn-outline-light">
+                Đăng xuất
+            </a>
+
+
+        </div>
+
+    </div>
+
+</nav>

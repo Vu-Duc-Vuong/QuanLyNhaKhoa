@@ -6,7 +6,6 @@ import com.qlnhakhoa.auth.entity.Role;
 import com.qlnhakhoa.auth.entity.User;
 import com.qlnhakhoa.auth.repository.UserRepository;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,10 +32,32 @@ public class AuthServiceImpl implements AuthService {
     public void register(RegisterRequest request) {
 
 
-
+        // Kiểm tra trùng username
         if(userRepository.existsByUsername(request.getUsername())){
 
-            throw new RuntimeException("Tài khoản đã tồn tại");
+            throw new RuntimeException(
+                    "Tài khoản đã tồn tại"
+            );
+
+        }
+
+
+        // Kiểm tra trùng email
+        if(userRepository.existsByEmail(request.getEmail())){
+
+            throw new RuntimeException(
+                    "Email đã được sử dụng"
+            );
+
+        }
+
+
+        // Kiểm tra trùng số điện thoại
+        if(userRepository.existsByPhone(request.getPhone())){
+
+            throw new RuntimeException(
+                    "Số điện thoại đã được sử dụng"
+            );
 
         }
 
@@ -75,18 +96,18 @@ public class AuthServiceImpl implements AuthService {
 
 
 
-        // Role mặc định
+        // Người đăng ký mặc định là bệnh nhân
         user.setRole(Role.PATIENT);
 
 
 
-        // trạng thái chờ admin duyệt
-        user.setStatus("PENDING");
+        // Trạng thái tài khoản
+        user.setStatus("ACTIVE");
 
 
 
-        // chưa được đăng nhập
-        user.setEnabled(false);
+        // Cho phép đăng nhập
+        user.setEnabled(true);
 
 
 
