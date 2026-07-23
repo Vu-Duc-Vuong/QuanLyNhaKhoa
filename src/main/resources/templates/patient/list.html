@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Danh sách bệnh nhân</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+
+
+<!-- Navbar -->
+<div th:replace="~{layout/sidebar}"></div>
+
+
+
+<!-- Nội dung -->
+
+<div class="container mt-4 flex-grow-1">
+
+
+    <h2 class="mb-4">
+        Danh sách bệnh nhân
+    </h2>
+
+
+
+    <a th:href="@{/patient/add}"
+       class="btn btn-primary mb-3">
+
+        + Thêm bệnh nhân
+
+    </a>
+
+
+
+
+
+    <!-- Tìm kiếm -->
+
+    <form th:action="@{/patient/search}"
+          method="get"
+          class="d-flex mb-3">
+
+
+        <input type="text"
+               name="keyword"
+               th:value="${keyword}"
+               class="form-control me-2"
+               placeholder="Nhập mã BN, họ tên hoặc SĐT">
+
+
+        <button class="btn btn-success">
+
+            Tìm kiếm
+
+        </button>
+
+
+    </form>
+
+
+
+
+
+
+    <table class="table table-bordered table-hover">
+
+
+        <thead class="table-dark">
+
+        <tr>
+
+            <th>Mã BN</th>
+
+            <th>Họ tên</th>
+
+            <th>SĐT</th>
+
+            <th>Giới tính</th>
+
+            <th>Địa chỉ</th>
+
+            <th>Chức năng</th>
+
+        </tr>
+
+        </thead>
+
+
+
+
+
+        <tbody>
+
+
+        <tr th:each="patient : ${patients}">
+
+
+            <td th:text="${patient.patientCode}"></td>
+
+
+            <td th:text="${patient.fullName}"></td>
+
+
+            <td th:text="${patient.phone}"></td>
+
+
+            <td th:text="${patient.gender}"></td>
+
+
+            <td th:text="${patient.address}"></td>
+
+
+
+
+            <td>
+
+
+                <a th:href="@{/patient/edit/{id}(id=${patient.id})}"
+                   class="btn btn-warning btn-sm">
+
+                    Sửa
+
+                </a>
+
+
+
+
+                <a th:href="@{/patient/delete/{id}(id=${patient.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Bạn có chắc muốn xóa bệnh nhân này?')">
+
+                    Xóa
+
+                </a>
+
+
+            </td>
+
+
+        </tr>
+
+
+        </tbody>
+
+
+    </table>
+
+
+</div>
+
+
+
+
+<!-- Footer -->
+
+<div class="mt-auto"
+     th:replace="~{layout/footer}">
+</div>
+
+
+
+
+</body>
+
+</html>

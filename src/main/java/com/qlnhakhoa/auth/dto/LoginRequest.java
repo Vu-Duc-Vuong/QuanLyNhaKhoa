@@ -2,18 +2,15 @@ package com.qlnhakhoa.auth.dto;
 
 public class LoginRequest {
 
-    private String phone;
+    private String username;
     private String password;
 
-    public LoginRequest() {
+    public String getUsername() {
+        return username;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
