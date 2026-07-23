@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            color: #0f172a;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+        .card {
+            width: min(960px, 100%);
+            border-radius: 28px;
+            background: white;
+            padding: 36px;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.14);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        .tag {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        h1 {
+            margin: 16px 0 8px;
+            font-size: clamp(30px, 4vw, 48px);
+        }
+        p {
+            margin: 0;
+            color: #475569;
+            line-height: 1.7;
+        }
+        .actions {
+            margin-top: 24px;
+        }
+        button {
+            border: 0;
+            border-radius: 14px;
+            padding: 14px 18px;
+            background: #dc2626;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<main class="card">
+    <span class="tag">Dashboard</span>
+    <h1>Đăng nhập thành công</h1>
+    <p>Đây là trang đích tạm thời để kiểm tra luồng đăng ký, đăng nhập và đăng xuất trước khi bạn commit từng bước.</p>
+
+    <div class="actions">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Đăng xuất</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

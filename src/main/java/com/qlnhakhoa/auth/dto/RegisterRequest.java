@@ -1,16 +1,16 @@
 package com.qlnhakhoa.auth.dto;
 
+import com.qlnhakhoa.auth.entity.Role;
+
 public class RegisterRequest {
 
     private String fullName;
-
-    private String username;
-
-    private String email;
-
     private String phone;
-
+    private String email;
     private String password;
+    private String confirmPassword;
+    private Role role = Role.PATIENT;
+    private Boolean status = Boolean.TRUE;
 
     public RegisterRequest() {
     }
@@ -23,12 +23,12 @@ public class RegisterRequest {
         this.fullName = fullName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -39,14 +39,6 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -55,4 +47,27 @@ public class RegisterRequest {
         this.password = password;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }
