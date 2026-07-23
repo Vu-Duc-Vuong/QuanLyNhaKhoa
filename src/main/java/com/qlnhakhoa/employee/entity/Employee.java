@@ -18,15 +18,17 @@ public class Employee {
     @Column(nullable = false, length = 100)
     private String fullName;
 
-    @Column(nullable = false, length = 30)
-    private String role; // DOCTOR, STAFF, ADMIN, RECEPTIONIST
-
     @Column(unique = true, nullable = false, length = 15)
     private String phone;
 
-    @Column(unique = true, length = 100)
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     @Builder.Default
-    private Boolean active = true;
+    private Role role = Role.CHO_DUYET; // Mặc định là CHO_DUYET
 }
