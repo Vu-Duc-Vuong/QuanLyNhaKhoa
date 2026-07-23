@@ -1,80 +1,113 @@
 package com.qlnhakhoa.auth.controller;
 
-import com.qlnhakhoa.auth.dto.LoginRequest;
-import com.qlnhakhoa.auth.dto.RegisterRequest;
-import com.qlnhakhoa.auth.entity.User;
-import com.qlnhakhoa.auth.service.AuthService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.qlnhakhoa.auth.dto.RegisterRequest;
+import com.qlnhakhoa.auth.service.AuthService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
 
 @Controller
-@RequestMapping
 public class AuthController {
 
-    private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    @Autowired
+    private AuthService authService;
 
+
+
+    // Trang đăng nhập
     @GetMapping("/login")
-    public String loginPage(Model model) {
-        if (!model.containsAttribute("loginRequest")) {
-            model.addAttribute("loginRequest", new LoginRequest());
+    public String loginPage(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "registerSuccess", required = false) String registerSuccess,
+            Model model
+    ) {
+
+
+        // Sai tài khoản hoặc mật khẩu
+        if(error != null){
+
+            model.addAttribute(
+                    "errorMessage",
+                    "Tài khoản hoặc mật khẩu không chính xác"
+            );
+
         }
-        return "login";
+
+
+
+        // Đăng ký thành công
+        if(registerSuccess != null){
+
+            model.addAttribute(
+                    "successMessage",
+                    "Đăng ký tài khoản thành công"
+            );
+
+        }
+
+
+        return "auth/login";
+
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute("loginRequest") LoginRequest loginRequest,
-                        HttpSession session,
-                        RedirectAttributes redirectAttributes) {
-        try {
-            User user = authService.login(loginRequest);
-            session.setAttribute(AuthService.SESSION_USER_KEY, user);
-            return "redirect:/dashboard";
-        } catch (RuntimeException exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-            return "redirect:/login";
-        }
-    }
 
+
+
+
+    // Trang đăng ký
     @GetMapping("/register")
-    public String registerPage(Model model) {
-        if (!model.containsAttribute("registerRequest")) {
-            model.addAttribute("registerRequest", new RegisterRequest());
-        }
-        return "register";
+    public String registerPage(
+            RegisterRequest request
+    ) {
+
+        return "auth/register";
+
     }
 
+
+
+
+
+    // Xử lý đăng ký
     @PostMapping("/register")
-    public String register(@ModelAttribute("registerRequest") RegisterRequest registerRequest,
-                           RedirectAttributes redirectAttributes) {
+    public String register(
+            @ModelAttribute RegisterRequest request,
+            Model model
+    ) {
+
+
         try {
-            authService.register(registerRequest);
-            redirectAttributes.addFlashAttribute("successMessage", "Đăng ký thành công, vui lòng đăng nhập.");
-            return "redirect:/login";
-        } catch (RuntimeException exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
-            return "redirect:/register";
+
+
+            authService.register(request);
+
+
+            // chuyển sang login + thông báo thành công
+            return "redirect:/login?registerSuccess=true";
+
+
+        } catch (RuntimeException e) {
+
+
+            // lỗi trùng tài khoản/email/sđt
+            model.addAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+
+
+            return "auth/register";
+
         }
+
+
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
-        Object currentUser = session.getAttribute(AuthService.SESSION_USER_KEY);
-        return currentUser != null ? "dashboard" : "redirect:/login";
-    }
 
-    @PostMapping("/logout")
-    public String logout(HttpSession session) {
-        authService.logout(session);
-        return "redirect:/login?logout";
-    }
 }

@@ -1,52 +1,238 @@
 package com.qlnhakhoa.appointment.controller;
 
-import com.qlnhakhoa.appointment.dto.AppointmentRequestDTO;
-import com.qlnhakhoa.appointment.dto.AppointmentResponseDTO;
+
+import com.qlnhakhoa.appointment.entity.Appointment;
 import com.qlnhakhoa.appointment.service.AppointmentService;
+import com.qlnhakhoa.patient.service.PatientService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/appointments")
+@Controller
 public class AppointmentController {
 
+
+
     @Autowired
-    private AppointmentService service;
+    private AppointmentService appointmentService;
 
-    @GetMapping
-    public ResponseEntity<List<AppointmentResponseDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+
+
+    @Autowired
+    private PatientService patientService;
+
+
+
+
+
+    // Danh sách lịch hẹn
+    @GetMapping("/appointment")
+    public String appointmentList(Model model){
+
+
+        model.addAttribute(
+                "appointments",
+                appointmentService.getAllAppointments()
+        );
+
+
+        return "appointment/list";
+
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<AppointmentResponseDTO>> getByDate(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return ResponseEntity.ok(service.getByDate(date));
+
+
+
+
+
+    // Mở form thêm lịch hẹn
+    @GetMapping("/appointment/add")
+    public String addAppointmentPage(Model model){
+
+
+        model.addAttribute(
+                "appointment",
+                new Appointment()
+        );
+
+
+        model.addAttribute(
+                "patients",
+                patientService.getAllPatients()
+        );
+
+
+        return "appointment/add";
+
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+
+
+
+
+
+    // Lưu thêm + sửa lịch hẹn
+    @PostMapping("/appointment/save")
+    public String saveAppointment(
+            @ModelAttribute Appointment appointment,
+            @RequestParam("patientId") Long patientId,
+            Model model){
+
+
+
+        // kiểm tra trùng lịch
+        boolean exists =
+                appointmentService.checkDuplicate(
+                        appointment.getAppointmentDate(),
+                        appointment.getAppointmentTime()
+                );
+
+
+
+        if(exists){
+
+
+            model.addAttribute(
+                    "appointment",
+                    appointment
+            );
+
+
+            model.addAttribute(
+                    "patients",
+                    patientService.getAllPatients()
+            );
+
+
+            model.addAttribute(
+                    "error",
+                    "Lịch hẹn này đã tồn tại!"
+            );
+
+
+            return "appointment/add";
+
+        }
+
+
+
+
+        appointment.setPatient(
+                patientService.getPatientById(patientId)
+        );
+
+
+
+        appointmentService.saveAppointment(appointment);
+
+
+
+        return "redirect:/appointment";
+
     }
 
-    @PostMapping
-    public ResponseEntity<AppointmentResponseDTO> create(@RequestBody AppointmentRequestDTO requestDTO) {
-        return ResponseEntity.ok(service.create(requestDTO));
+
+
+
+
+
+
+
+    // Mở form sửa lịch hẹn
+    @GetMapping("/appointment/edit/{id}")
+    public String editAppointment(
+            @PathVariable Long id,
+            Model model){
+
+
+
+        Appointment appointment =
+                appointmentService.getAppointmentById(id);
+
+
+
+        model.addAttribute(
+                "appointment",
+                appointment
+        );
+
+
+
+        model.addAttribute(
+                "patients",
+                patientService.getAllPatients()
+        );
+
+
+
+        return "appointment/edit";
+
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> update(@PathVariable Long id, @RequestBody AppointmentRequestDTO requestDTO) {
-        return ResponseEntity.ok(service.update(id, requestDTO));
+
+
+
+
+
+
+    // Đổi trạng thái lịch hẹn
+    @GetMapping("/appointment/status/{id}/{status}")
+    public String updateStatus(
+            @PathVariable Long id,
+            @PathVariable String status){
+
+
+
+        appointmentService.updateStatus(
+                id,
+                status
+        );
+
+
+        return "redirect:/appointment";
+
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+
+
+
+
+
+
+    // Xóa lịch hẹn
+    @GetMapping("/appointment/delete/{id}")
+    public String deleteAppointment(
+            @PathVariable Long id){
+
+
+
+        appointmentService.deleteAppointment(id);
+
+
+
+        return "redirect:/appointment";
+
     }
+    // Tìm kiếm lịch hẹn
+    @GetMapping("/appointment/search")
+    public String searchAppointment(
+            @RequestParam("keyword") String keyword,
+            Model model){
+
+
+        model.addAttribute(
+                "appointments",
+                appointmentService.search(keyword)
+        );
+
+
+        return "appointment/list";
+
+    }
+
+
 }
