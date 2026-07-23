@@ -40,4 +40,9 @@ public interface AppointmentRepository
     );
 
 
+
+    // Lấy danh sách lịch hẹn theo trạng thái (dùng cho module Khám bệnh)
+    List<Appointment> findByStatus(String status);
+
+
 }
