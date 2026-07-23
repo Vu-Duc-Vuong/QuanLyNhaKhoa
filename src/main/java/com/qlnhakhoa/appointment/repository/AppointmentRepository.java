@@ -17,14 +17,27 @@ public interface AppointmentRepository
         extends JpaRepository<Appointment, Long> {
 
 
+
+    // Kiểm tra trùng lịch
     boolean existsByAppointmentDateAndAppointmentTime(
             LocalDate date,
             LocalTime time
     );
 
 
+
+    // Tìm lịch theo ngày
     List<Appointment> findByAppointmentDate(
             LocalDate date
     );
+
+
+
+    // Tìm kiếm theo mã lịch hoặc tên bệnh nhân
+    List<Appointment> findByAppointmentCodeContainingIgnoreCaseOrPatientFullNameContainingIgnoreCase(
+            String code,
+            String name
+    );
+
 
 }

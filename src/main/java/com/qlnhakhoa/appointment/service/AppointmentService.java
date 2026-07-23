@@ -74,18 +74,36 @@ public class AppointmentService {
                 );
 
     }
-public void updateStatus(Long id, String status){
 
-    Appointment appointment = getAppointmentById(id);
 
-    if(appointment != null){
 
-        appointment.setStatus(status);
+    // Tìm kiếm lịch hẹn
+    public List<Appointment> search(String keyword){
 
-        appointmentRepository.save(appointment);
+        return appointmentRepository
+                .findByAppointmentCodeContainingIgnoreCaseOrPatientFullNameContainingIgnoreCase(
+                        keyword,
+                        keyword
+                );
 
     }
 
-}
+
+
+    // Cập nhật trạng thái
+    public void updateStatus(Long id, String status){
+
+        Appointment appointment = getAppointmentById(id);
+
+        if(appointment != null){
+
+            appointment.setStatus(status);
+
+            appointmentRepository.save(appointment);
+
+        }
+
+    }
+
 
 }

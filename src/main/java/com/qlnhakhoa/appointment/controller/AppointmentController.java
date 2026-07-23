@@ -217,7 +217,22 @@ public class AppointmentController {
         return "redirect:/appointment";
 
     }
+    // Tìm kiếm lịch hẹn
+    @GetMapping("/appointment/search")
+    public String searchAppointment(
+            @RequestParam("keyword") String keyword,
+            Model model){
 
+
+        model.addAttribute(
+                "appointments",
+                appointmentService.search(keyword)
+        );
+
+
+        return "appointment/list";
+
+    }
 
 
 }

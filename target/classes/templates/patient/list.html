@@ -13,7 +13,7 @@ rel="stylesheet">
 </head>
 
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 
 <!-- Navbar -->
@@ -23,7 +23,7 @@ rel="stylesheet">
 
 <!-- Nội dung -->
 
-<div class="container mt-4">
+<div class="container mt-4 flex-grow-1">
 
 
     <h2 class="mb-4">
@@ -41,6 +41,9 @@ rel="stylesheet">
 
 
 
+
+
+    <!-- Tìm kiếm -->
 
     <form th:action="@{/patient/search}"
           method="get"
@@ -62,6 +65,7 @@ rel="stylesheet">
 
 
     </form>
+
 
 
 
@@ -93,6 +97,7 @@ rel="stylesheet">
 
 
 
+
         <tbody>
 
 
@@ -101,13 +106,19 @@ rel="stylesheet">
 
             <td th:text="${patient.patientCode}"></td>
 
+
             <td th:text="${patient.fullName}"></td>
+
 
             <td th:text="${patient.phone}"></td>
 
+
             <td th:text="${patient.gender}"></td>
 
+
             <td th:text="${patient.address}"></td>
+
+
 
 
             <td>
@@ -119,6 +130,8 @@ rel="stylesheet">
                     Sửa
 
                 </a>
+
+
 
 
                 <a th:href="@{/patient/delete/{id}(id=${patient.id})}"
@@ -146,7 +159,14 @@ rel="stylesheet">
 
 
 
-<div th:replace="~{layout/footer}"></div>
+
+<!-- Footer -->
+
+<div class="mt-auto"
+     th:replace="~{layout/footer}">
+</div>
+
+
 
 
 </body>
