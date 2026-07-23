@@ -1,5 +1,6 @@
 package com.qlnhakhoa.auth.controller;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.qlnhakhoa.auth.dto.RegisterRequest;
 import com.qlnhakhoa.auth.service.AuthService;
 
@@ -14,10 +15,21 @@ public class AuthController {
     private AuthService authService;
 
     // Trang đăng nhập
-    @GetMapping("/login")
-    public String loginPage() {
-        return "auth/login";
+   @GetMapping("/login")
+public String loginPage(
+        @RequestParam(value = "error", required = false) String error,
+        Model model
+) {
+
+    if(error != null){
+        model.addAttribute(
+                "errorMessage",
+                "Tài khoản hoặc mật khẩu không chính xác"
+        );
     }
+
+    return "auth/login";
+}
 
     // Trang đăng ký
     @GetMapping("/register")
@@ -26,13 +38,18 @@ public class AuthController {
     }
 
     // Xử lý đăng ký
-    @PostMapping("/register")
-    public String register(
-            @ModelAttribute RegisterRequest request) {
+  @PostMapping("/register")
+public String register(
+        @ModelAttribute RegisterRequest request) {
 
-        authService.register(request);
+    System.out.println(request.getFullName());
+    System.out.println(request.getUsername());
+    System.out.println(request.getEmail());
+    System.out.println(request.getPhone());
 
-        return "redirect:/login";
-    }
+    authService.register(request);
+
+    return "redirect:/login";
+}
 
 }

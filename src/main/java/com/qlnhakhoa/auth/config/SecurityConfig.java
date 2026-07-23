@@ -1,5 +1,6 @@
 package com.qlnhakhoa.auth.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,53 +11,85 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
+
+
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)
-            throws Exception {
+    public PasswordEncoder passwordEncoder(){
+
+        return new BCryptPasswordEncoder();
+
+    }
+
+
+
+
+    @Bean
+    public SecurityFilterChain filterChain(
+            HttpSecurity http
+    ) throws Exception {
+
 
         http
-                .csrf(csrf -> csrf.disable())
 
-                .authorizeHttpRequests(auth -> auth
+        .csrf(csrf -> csrf.disable())
 
-                        .requestMatchers(
-                                "/register",
-                                "/login",
-                                "/css/**",
-                                "/js/**",
-                                "/images/**"
-                        ).permitAll()
 
-                        .anyRequest().authenticated()
+        .authorizeHttpRequests(auth -> auth
+
+
+                .requestMatchers(
+                        "/register",
+                        "/login",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**"
                 )
 
-                .formLogin(form -> form
+                .permitAll()
 
-                        .loginPage("/login")
 
-                        .defaultSuccessUrl("/", true)
+                .anyRequest()
+                .authenticated()
 
-                        .permitAll()
-                )
+        )
 
-                .logout(logout -> logout
 
-                        .logoutUrl("/logout")
 
-                        .logoutSuccessUrl("/login?logout")
+        .formLogin(form -> form
 
-                        .permitAll()
-                );
+        .loginPage("/login")
+
+        // Sai tài khoản hoặc mật khẩu
+        .failureUrl("/login?error=true")
+
+        .defaultSuccessUrl("/home", true)
+
+        .permitAll()
+
+)
+
+
+
+        .logout(logout -> logout
+
+
+                .logoutUrl("/logout")
+
+                .logoutSuccessUrl("/login?logout")
+
+                .permitAll()
+
+        );
+
 
         return http.build();
+
     }
+
 
 }

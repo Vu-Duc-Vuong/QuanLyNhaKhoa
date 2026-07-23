@@ -74,6 +74,18 @@ public class AppointmentService {
                 );
 
     }
+public void updateStatus(Long id, String status){
 
+    Appointment appointment = getAppointmentById(id);
+
+    if(appointment != null){
+
+        appointment.setStatus(status);
+
+        appointmentRepository.save(appointment);
+
+    }
+
+}
 
 }
