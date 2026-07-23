@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm bệnh nhân</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h2>Thêm bệnh nhân</h2>
+
+    <form action="/patient/save" method="post">
+
+        <div class="mb-3">
+            <label>Mã bệnh nhân</label>
+            <input type="text"
+                   name="patientCode"
+                   class="form-control"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label>Họ tên</label>
+            <input type="text"
+                   name="fullName"
+                   class="form-control"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label>Ngày sinh</label>
+            <input type="date"
+                   name="dateOfBirth"
+                   class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Giới tính</label>
+
+            <select name="gender" class="form-control">
+                <option>Nam</option>
+                <option>Nữ</option>
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+            <label>Số điện thoại</label>
+            <input type="text"
+                   name="phone"
+                   class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Địa chỉ</label>
+            <input type="text"
+                   name="address"
+                   class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>CCCD</label>
+            <input type="text"
+                   name="cccd"
+                   class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label>Tiền sử bệnh</label>
+            <textarea name="medicalHistory"
+                      class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Dị ứng</label>
+            <textarea name="allergy"
+                      class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Lý do khám</label>
+            <textarea name="reason"
+                      class="form-control"></textarea>
+        </div>
+
+        <button class="btn btn-success">
+            Lưu
+        </button>
+
+        <a href="/patient" class="btn btn-secondary">
+            Quay lại
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
