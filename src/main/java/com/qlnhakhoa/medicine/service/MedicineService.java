@@ -11,32 +11,34 @@ import java.util.List;
 public class MedicineService {
 
     @Autowired
-    private MedicineRepository repository;
+    private MedicineRepository medicineRepository;
 
+    // Lấy tất cả thuốc
     public List<Medicine> getAllMedicines() {
-        return repository.findAll();
+        return medicineRepository.findAll();
     }
 
-    public Medicine getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy loại thuốc với ID: " + id));
+    // Lưu / Cập nhật thông tin thuốc
+    public Medicine saveMedicine(Medicine medicine) {
+        return medicineRepository.save(medicine);
     }
 
-    public Medicine create(Medicine medicine) {
-        return repository.save(medicine);
+    // Lấy chi tiết thuốc theo ID
+    public Medicine getMedicineById(Long id) {
+        return medicineRepository.findById(id).orElse(null);
     }
 
-    public Medicine update(Long id, Medicine details) {
-        Medicine medicine = getById(id);
-        medicine.setName(details.getName());
-        medicine.setUnit(details.getUnit());
-        medicine.setStockQuantity(details.getStockQuantity());
-        medicine.setPrice(details.getPrice());
-        medicine.setUsageInstructions(details.getUsageInstructions());
-        return repository.save(medicine);
+    // Xóa thuốc
+    public void deleteMedicine(Long id) {
+        medicineRepository.deleteById(id);
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    // Tìm kiếm thuốc theo từ khóa
+    public List<Medicine> searchMedicine(String keyword) {
+        return medicineRepository
+                .findByMedicineCodeContainingIgnoreCaseOrMedicineNameContainingIgnoreCase(
+                        keyword,
+                        keyword
+                );
     }
 }

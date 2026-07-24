@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách thuốc - Quản lý Nha khoa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: #212529 !important; }
+        .btn-custom-search { background-color: #198754; color: white; }
+        .btn-custom-search:hover { background-color: #157347; color: white; }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 px-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Quản lý Nha khoa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/patient">Bệnh nhân</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/appointment">Lịch hẹn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/treatment">Khám bệnh</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/invoice">Hóa đơn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/report">Báo cáo</a></li>
+                </ul>
+                <div class="d-flex align-items-center text-white">
+                    <span class="me-3">admin</span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="fw-bold mb-4">Danh sách thuốc</h2>
+
+        <!-- Nút thêm thuốc -->
+        <div class="mb-3">
+            <a th:href="@{/medicine/add}" class="btn btn-primary fw-medium">+ Thêm thuốc</a>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <form th:action="@{/medicine/search}" method="get" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="keyword" th:value="${keyword}" class="form-control form-control-lg" placeholder="Nhập mã thuốc hoặc tên thuốc...">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-custom-search btn-lg fw-medium">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Bảng danh sách thuốc -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" style="width: 12%;">Mã thuốc</th>
+                        <th scope="col" style="width: 25%;">Tên thuốc</th>
+                        <th scope="col" style="width: 13%;">Đơn vị tính</th>
+                        <th scope="col" style="width: 15%;">Đơn giá (VNĐ)</th>
+                        <th scope="col" style="width: 15%;">Số lượng tồn</th>
+                        <th scope="col" style="width: 20%; text-align: center;">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="med : ${medicines}">
+                        <td th:text="${med.medicineCode}">MED01</td>
+                        <td class="fw-bold" th:text="${med.medicineName}">Paracetamol 500mg</td>
+                        <td th:text="${med.unit}">Viên</td>
+                        <td th:text="${#numbers.formatDecimal(med.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">2,000 đ</td>
+                        <td th:text="${med.quantity}">100</td>
+                        <td class="text-center">
+                            <a th:href="@{/medicine/edit/{id}(id=${med.id})}" class="btn btn-warning btn-sm text-dark me-1 fw-medium">Sửa</a>
+                            <a th:href="@{/medicine/delete/{id}(id=${med.id})}" class="btn btn-danger btn-sm fw-medium" onclick="return confirm('Bạn có chắc chắn muốn xóa thuốc này?');">Xóa</a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(medicines)}">
+                        <td colspan="6" class="text-center text-muted py-4">Chưa có dữ liệu thuốc nào.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="text-center mt-5 mb-4 text-muted small">
+            © N02 Quản lý Nha Khoa
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

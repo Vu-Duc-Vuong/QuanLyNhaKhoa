@@ -8,5 +8,10 @@ import java.util.List;
 
 @Repository
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
-    List<Medicine> findByNameContainingIgnoreCase(String keyword);
+
+    // Tìm kiếm theo mã thuốc hoặc tên thuốc (không phân biệt hoa thường)
+    List<Medicine> findByMedicineCodeContainingIgnoreCaseOrMedicineNameContainingIgnoreCase(
+            String medicineCode,
+            String medicineName
+    );
 }

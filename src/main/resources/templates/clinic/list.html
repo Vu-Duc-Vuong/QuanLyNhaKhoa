@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách phòng khám - Quản lý Nha khoa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: #212529 !important; }
+        .btn-custom-search { background-color: #198754; color: white; }
+        .btn-custom-search:hover { background-color: #157347; color: white; }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 px-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Quản lý Nha khoa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/patient">Bệnh nhân</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/appointment">Lịch hẹn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/treatment">Khám bệnh</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/service">Dịch vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/staff">Nhân viên</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="/clinic">Phòng khám</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/schedule">Lịch bác sĩ</a></li>
+                </ul>
+                <div class="d-flex align-items-center text-white">
+                    <span class="me-3">admin</span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="fw-bold mb-4">Danh sách phòng khám</h2>
+
+        <!-- Nút thêm phòng khám -->
+        <div class="mb-3">
+            <a th:href="@{/clinic/add}" class="btn btn-primary fw-medium">+ Thêm phòng khám</a>
+        </div>
+
+        <!-- Form tìm kiếm -->
+        <form th:action="@{/clinic/search}" method="get" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="keyword" th:value="${keyword}" class="form-control form-control-lg" placeholder="Nhập mã phòng hoặc tên phòng khám...">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-custom-search btn-lg fw-medium">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Bảng danh sách phòng khám -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle bg-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" style="width: 15%;">Mã phòng</th>
+                        <th scope="col" style="width: 30%;">Tên phòng khám</th>
+                        <th scope="col" style="width: 25%;">Vị trí</th>
+                        <th scope="col" style="width: 15%;">Trạng thái</th>
+                        <th scope="col" style="width: 15%; text-align: center;">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${clinics}">
+                        <td th:text="${c.clinicCode}">PK01</td>
+                        <td class="fw-bold" th:text="${c.clinicName}">Phòng Khám Tổng Quát 1</td>
+                        <td th:text="${c.location}">Tầng 2 - Phòng 201</td>
+                        <td>
+                            <span th:if="${c.status == 'Hoạt động'}" class="badge bg-success">Hoạt động</span>
+                            <span th:if="${c.status == 'Đang bảo trì'}" class="badge bg-warning text-dark">Đang bảo trì</span>
+                            <span th:if="${c.status == 'Tạm đóng'}" class="badge bg-danger">Tạm đóng</span>
+                            <span th:if="${c.status != 'Hoạt động' && c.status != 'Đang bảo trì' && c.status != 'Tạm đóng'}" class="badge bg-info" th:text="${c.status}">Khác</span>
+                        </td>
+                        <td class="text-center">
+                            <a th:href="@{/clinic/edit/{id}(id=${c.id})}" class="btn btn-warning btn-sm text-dark me-1 fw-medium">Sửa</a>
+                            <a th:href="@{/clinic/delete/{id}(id=${c.id})}" class="btn btn-danger btn-sm fw-medium" onclick="return confirm('Bạn có chắc chắn muốn xóa phòng khám này?');">Xóa</a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(clinics)}">
+                        <td colspan="5" class="text-center text-muted py-4">Chưa có dữ liệu phòng khám nào.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="text-center mt-5 mb-4 text-muted small">
+            © N02 Quản lý Nha Khoa
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -3,41 +3,72 @@ package com.qlnhakhoa.dentalservice.controller;
 import com.qlnhakhoa.dentalservice.entity.DentalService;
 import com.qlnhakhoa.dentalservice.service.DentalServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/v1/services")
+@Controller
 public class DentalServiceController {
 
     @Autowired
-    private DentalServiceService service;
+    private DentalServiceService dentalServiceService;
 
-    @GetMapping
-    public ResponseEntity<List<DentalService>> getAll() {
-        return ResponseEntity.ok(service.getAllServices());
+    // Danh sách dịch vụ
+    @GetMapping("/service")
+    public String serviceList(Model model) {
+        model.addAttribute(
+                "services",
+                dentalServiceService.getAllServices()
+        );
+        return "dentalservice/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DentalService> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+    // Mở trang thêm dịch vụ
+    @GetMapping("/service/add")
+    public String addServicePage(Model model) {
+        model.addAttribute(
+                "serviceItem",
+                new DentalService()
+        );
+        return "dentalservice/add";
     }
 
-    @PostMapping
-    public ResponseEntity<DentalService> create(@RequestBody DentalService dentalService) {
-        return ResponseEntity.ok(service.create(dentalService));
+    // Lưu thêm / cập nhật dịch vụ
+    @PostMapping("/service/save")
+    public String saveService(@ModelAttribute("serviceItem") DentalService serviceItem) {
+        dentalServiceService.saveService(serviceItem);
+        return "redirect:/service";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DentalService> update(@PathVariable Long id, @RequestBody DentalService details) {
-        return ResponseEntity.ok(service.update(id, details));
+    // Mở trang sửa dịch vụ
+    @GetMapping("/service/edit/{id}")
+    public String editService(@PathVariable Long id, Model model) {
+        DentalService serviceItem = dentalServiceService.getServiceById(id);
+        model.addAttribute(
+                "serviceItem",
+                serviceItem
+        );
+        return "dentalservice/edit";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    // Xóa dịch vụ
+    @GetMapping("/service/delete/{id}")
+    public String deleteService(@PathVariable Long id) {
+        dentalServiceService.deleteService(id);
+        return "redirect:/service";
+    }
+
+    // Tìm kiếm dịch vụ
+    @GetMapping("/service/search")
+    public String searchService(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute(
+                "services",
+                dentalServiceService.searchService(keyword)
+        );
+        model.addAttribute(
+                "keyword",
+                keyword
+        );
+        return "dentalservice/list";
     }
 }

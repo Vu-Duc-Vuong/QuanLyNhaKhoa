@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cập nhật nhân viên - Quản lý Nha khoa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: #212529 !important; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 px-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Quản lý Nha khoa</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="/staff">Nhân viên</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 700px;">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark fw-bold fs-5 py-3">
+                Sửa thông tin nhân viên
+            </div>
+            <div class="card-body p-4">
+                <form th:action="@{/staff/save}" th:object="${staff}" method="post">
+                    
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Mã nhân viên <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{staffCode}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Chức vụ <span class="text-danger">*</span></label>
+                            <select th:field="*{role}" class="form-select" required>
+                                <option value="Bác sĩ">Bác sĩ</option>
+                                <option value="Y tá">Y tá</option>
+                                <option value="Lễ tân">Lễ tân</option>
+                                <option value="Quản lý">Quản lý</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" th:field="*{fullName}" class="form-control" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Số điện thoại</label>
+                            <input type="text" th:field="*{phone}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Trạng thái làm việc</label>
+                        <select th:field="*{status}" class="form-select">
+                            <option value="Đang làm việc">Đang làm việc</option>
+                            <option value="Nghỉ phép">Nghỉ phép</option>
+                            <option value="Đã nghỉ việc">Đã nghỉ việc</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/staff}" class="btn btn-secondary px-4">Hủy</a>
+                        <button type="submit" class="btn btn-warning px-4 fw-bold">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

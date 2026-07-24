@@ -8,5 +8,10 @@ import java.util.List;
 
 @Repository
 public interface DentalServiceRepository extends JpaRepository<DentalService, Long> {
-    List<DentalService> findByActiveTrue();
+
+    // Tìm kiếm theo mã dịch vụ hoặc tên dịch vụ
+    List<DentalService> findByServiceCodeContainingIgnoreCaseOrServiceNameContainingIgnoreCase(
+            String serviceCode,
+            String serviceName
+    );
 }

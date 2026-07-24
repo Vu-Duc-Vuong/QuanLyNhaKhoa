@@ -3,41 +3,72 @@ package com.qlnhakhoa.medicine.controller;
 import com.qlnhakhoa.medicine.entity.Medicine;
 import com.qlnhakhoa.medicine.service.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/v1/medicines")
+@Controller
 public class MedicineController {
 
     @Autowired
-    private MedicineService service;
+    private MedicineService medicineService;
 
-    @GetMapping
-    public ResponseEntity<List<Medicine>> getAll() {
-        return ResponseEntity.ok(service.getAllMedicines());
+    // Danh sách thuốc
+    @GetMapping("/medicine")
+    public String medicineList(Model model) {
+        model.addAttribute(
+                "medicines",
+                medicineService.getAllMedicines()
+        );
+        return "medicine/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Medicine> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getById(id));
+    // Mở trang thêm thuốc
+    @GetMapping("/medicine/add")
+    public String addMedicinePage(Model model) {
+        model.addAttribute(
+                "medicine",
+                new Medicine()
+        );
+        return "medicine/add";
     }
 
-    @PostMapping
-    public ResponseEntity<Medicine> create(@RequestBody Medicine medicine) {
-        return ResponseEntity.ok(service.create(medicine));
+    // Lưu thêm / cập nhật thuốc
+    @PostMapping("/medicine/save")
+    public String saveMedicine(@ModelAttribute Medicine medicine) {
+        medicineService.saveMedicine(medicine);
+        return "redirect:/medicine";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Medicine> update(@PathVariable Long id, @RequestBody Medicine details) {
-        return ResponseEntity.ok(service.update(id, details));
+    // Mở trang sửa thông tin thuốc
+    @GetMapping("/medicine/edit/{id}")
+    public String editMedicine(@PathVariable Long id, Model model) {
+        Medicine medicine = medicineService.getMedicineById(id);
+        model.addAttribute(
+                "medicine",
+                medicine
+        );
+        return "medicine/edit";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    // Xóa thuốc
+    @GetMapping("/medicine/delete/{id}")
+    public String deleteMedicine(@PathVariable Long id) {
+        medicineService.deleteMedicine(id);
+        return "redirect:/medicine";
+    }
+
+    // Tìm kiếm thuốc
+    @GetMapping("/medicine/search")
+    public String searchMedicine(@RequestParam("keyword") String keyword, Model model) {
+        model.addAttribute(
+                "medicines",
+                medicineService.searchMedicine(keyword)
+        );
+        model.addAttribute(
+                "keyword",
+                keyword
+        );
+        return "medicine/list";
     }
 }
