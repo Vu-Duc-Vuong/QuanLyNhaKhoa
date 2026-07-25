@@ -8,22 +8,63 @@
     <style>
         body { background-color: #f8f9fa; }
         .navbar { background-color: #212529 !important; }
+        .nav-link { font-weight: 500 !important; }
+/* Đồng bộ 100% Navbar theo ảnh mẫu */
+.navbar-dark .navbar-nav .nav-link {
+    color: #ffffff !important;        /* Ép tất cả các chữ đều màu trắng sáng */
+    font-weight: 400 !important;     /* Cố định độ dày nét chữ bằng nhau */
+    opacity: 0.95;                    /* Rõ nét như hình mẫu */
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Đảm bảo khi chọn (active) hoặc hover không bị thay đổi độ dày phông */
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    font-weight: 400 !important;
+}
+/* Ép khoảng cách mép trái/phải về chuẩn 20px giống hệt ảnh mẫu */
+.navbar .container-fluid,
+.container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+/* 1. Thu hẹp khoảng cách từ "Quản lý Nha khoa" sang "Trang chủ" */
+.navbar-brand {
+    margin-right: 24px !important; /* Đưa về chuẩn ~24px giống mẫu */
+}
+
+/* 2. Chỉnh khoảng cách giữa các chữ menu khít lại đúng như mẫu */
+.navbar-dark .navbar-nav .nav-link {
+    padding-left: 10px !important;  /* Khoảng cách trái/phải mỗi chữ */
+    padding-right: 10px !important;
+}
     </style>
 </head>
 <body>
 
     <!-- Header / Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4 px-3">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">Quản lý Nha khoa</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid px-2">
+            <a class="navbar-brand " href="#">Quản lý Nha khoa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link" href="/patient">Bệnh nhân</a></li>
                     <li class="nav-item"><a class="nav-link" href="/appointment">Lịch hẹn</a></li>
                     <li class="nav-item"><a class="nav-link" href="/treatment">Khám bệnh</a></li>
-                    <li class="nav-item"><a class="nav-link active fw-bold" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/invoice">Hóa đơn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/report">Báo cáo</a></li>
                 </ul>
+                <div class="d-flex align-items-center text-white">
+                    <span class="me-3">admin</span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                </div>
             </div>
         </div>
     </nav>

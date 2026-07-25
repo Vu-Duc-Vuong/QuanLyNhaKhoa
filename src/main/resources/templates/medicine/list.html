@@ -8,16 +8,48 @@
     <style>
         body { background-color: #f8f9fa; }
         .navbar { background-color: #212529 !important; }
+        .nav-link { font-weight: 500 !important; } /* Cố định phông chữ bằng nhau */
         .btn-custom-search { background-color: #198754; color: white; }
         .btn-custom-search:hover { background-color: #157347; color: white; }
+        /* Đồng bộ 100% Navbar theo ảnh mẫu */
+.navbar-dark .navbar-nav .nav-link {
+    color: #ffffff !important;        /* Ép tất cả các chữ đều màu trắng sáng */
+    font-weight: 400 !important;     /* Cố định độ dày nét chữ bằng nhau */
+    opacity: 0.95;                    /* Rõ nét như hình mẫu */
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Đảm bảo khi chọn (active) hoặc hover không bị thay đổi độ dày phông */
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    font-weight: 400 !important;
+}
+/* Ép khoảng cách mép trái/phải về chuẩn 20px giống hệt ảnh mẫu */
+.navbar .container-fluid,
+.container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+/* 1. Thu hẹp khoảng cách từ "Quản lý Nha khoa" sang "Trang chủ" */
+.navbar-brand {
+    margin-right: 24px !important; /* Đưa về chuẩn ~24px giống mẫu */
+}
+
+/* 2. Chỉnh khoảng cách giữa các chữ menu khít lại đúng như mẫu */
+.navbar-dark .navbar-nav .nav-link {
+    padding-left: 10px !important;  /* Khoảng cách trái/phải mỗi chữ */
+    padding-right: 10px !important;
+}
     </style>
 </head>
 <body>
 
     <!-- Header / Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4 px-3">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">Quản lý Nha khoa</a>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid px-2">
+            <a class="navbar-brand " href="#">Quản lý Nha khoa</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,7 +59,7 @@
                     <li class="nav-item"><a class="nav-link" href="/patient">Bệnh nhân</a></li>
                     <li class="nav-item"><a class="nav-link" href="/appointment">Lịch hẹn</a></li>
                     <li class="nav-item"><a class="nav-link" href="/treatment">Khám bệnh</a></li>
-                    <li class="nav-item"><a class="nav-link active fw-bold" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/medicine">Thuốc</a></li>
                     <li class="nav-item"><a class="nav-link" href="/invoice">Hóa đơn</a></li>
                     <li class="nav-item"><a class="nav-link" href="/report">Báo cáo</a></li>
                 </ul>
@@ -64,12 +96,14 @@
             <table class="table table-bordered table-hover align-middle bg-white">
                 <thead class="table-dark">
                     <tr>
-                        <th scope="col" style="width: 12%;">Mã thuốc</th>
-                        <th scope="col" style="width: 25%;">Tên thuốc</th>
-                        <th scope="col" style="width: 13%;">Đơn vị tính</th>
-                        <th scope="col" style="width: 15%;">Đơn giá (VNĐ)</th>
-                        <th scope="col" style="width: 15%;">Số lượng tồn</th>
-                        <th scope="col" style="width: 20%; text-align: center;">Chức năng</th>
+                        <th scope="col" style="width: 10%;">Mã thuốc</th>
+                        <th scope="col" style="width: 22%;">Tên thuốc</th>
+                        <th scope="col" style="width: 10%;">Đơn vị tính</th>
+                        <th scope="col" style="width: 13%;">Đơn giá (VNĐ)</th>
+                        <th scope="col" style="width: 10%;">Số lượng tồn</th>
+                        <!-- CỘT GHI CHÚ BỔ SUNG -->
+                        <th scope="col" style="width: 20%;">Ghi chú</th>
+                        <th scope="col" style="width: 15%; text-align: center;">Chức năng</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,6 +113,8 @@
                         <td th:text="${med.unit}">Viên</td>
                         <td th:text="${#numbers.formatDecimal(med.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">2,000 đ</td>
                         <td th:text="${med.quantity}">100</td>
+                        <!-- HIỂN THỊ DỮ LIỆU GHI CHÚ -->
+                        <td class="text-muted fst-italic" th:text="${med.note}">Uống 1-2 viên/lần</td>
                         <td class="text-center">
                             <a th:href="@{/medicine/edit/{id}(id=${med.id})}" class="btn btn-warning btn-sm text-dark me-1 fw-medium">Sửa</a>
                             <a th:href="@{/medicine/delete/{id}(id=${med.id})}" class="btn btn-danger btn-sm fw-medium" onclick="return confirm('Bạn có chắc chắn muốn xóa thuốc này?');">Xóa</a>
@@ -86,7 +122,7 @@
                     </tr>
 
                     <tr th:if="${#lists.isEmpty(medicines)}">
-                        <td colspan="6" class="text-center text-muted py-4">Chưa có dữ liệu thuốc nào.</td>
+                        <td colspan="7" class="text-center text-muted py-4">Chưa có dữ liệu thuốc nào.</td>
                     </tr>
                 </tbody>
             </table>
