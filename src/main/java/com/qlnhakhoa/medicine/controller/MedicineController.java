@@ -33,9 +33,15 @@ public class MedicineController {
         return "medicine/add";
     }
 
-    // Lưu thêm / cập nhật thuốc
+    // Lưu thêm / cập nhật thuốc (Tự động nối tiền tố MED- nếu chưa có)
     @PostMapping("/medicine/save")
     public String saveMedicine(@ModelAttribute Medicine medicine) {
+        if (medicine.getMedicineCode() != null && !medicine.getMedicineCode().trim().isEmpty()) {
+            String code = medicine.getMedicineCode().trim();
+            if (!code.toUpperCase().startsWith("MED-")) {
+                medicine.setMedicineCode("MED-" + code);
+            }
+        }
         medicineService.saveMedicine(medicine);
         return "redirect:/medicine";
     }

@@ -33,12 +33,21 @@ public class MedicineService {
         medicineRepository.deleteById(id);
     }
 
-    // Tìm kiếm thuốc theo từ khóa
+    // Tìm kiếm thuốc theo từ khóa (Chuẩn hóa từ khóa tìm chính xác mã)
     public List<Medicine> searchMedicine(String keyword) {
-        return medicineRepository
-                .findByMedicineCodeContainingIgnoreCaseOrMedicineNameContainingIgnoreCase(
-                        keyword,
-                        keyword
-                );
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllMedicines();
+        }
+
+        String trimmed = keyword.trim();
+
+        // Chuẩn hóa exactCode: Nếu người dùng nhập "002" hoặc "MED-002", tự động thành "MED-002"
+        String exactCode = trimmed;
+        if (!exactCode.toUpperCase().startsWith("MED-")) {
+            exactCode = "MED-" + trimmed;
+        }
+
+        // Truyền exactCode (MED-002) để tìm chính xác mã, và trimmed để tìm gần đúng tên
+        return medicineRepository.searchCustom(exactCode, trimmed);
     }
 }

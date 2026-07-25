@@ -78,9 +78,14 @@
                 <form th:action="@{/medicine/save}" th:object="${medicine}" method="post">
                     
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Mã thuốc <span class="text-danger">*</span></label>
-                        <input type="text" th:field="*{medicineCode}" class="form-control" placeholder="Ví dụ: MED001" required>
-                    </div>
+    <label class="form-label fw-bold">Mã thuốc <span class="text-danger">*</span></label>
+    <!-- Tạo ô hiển thị sẵn chữ MED- ở đầu -->
+    <div class="input-group">
+        <span class="input-group-text fw-bold bg-light text-secondary">MED-</span>
+        <input type="text" th:field="*{medicineCode}" class="form-control" placeholder="001" required>
+    </div>
+    <div class="form-text">Bạn chỉ cần nhập phần số (ví dụ: 001, 002).</div>
+</div>
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Tên thuốc <span class="text-danger">*</span></label>
@@ -94,7 +99,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold">Đơn giá (VNĐ)</label>
-                            <input type="number" step="500" th:field="*{price}" class="form-control" placeholder="0">
+                            <input type="number" min="0" step="any" th:field="*{price}" class="form-control" placeholder="0">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold">Số lượng nhập</label>

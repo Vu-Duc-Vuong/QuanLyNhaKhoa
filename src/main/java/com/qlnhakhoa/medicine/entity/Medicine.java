@@ -11,7 +11,7 @@ public class Medicine {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String medicineCode;   // Mã thuốc
+    private String medicineCode;   // Mã thuốc (Ví dụ: MED-001)
 
     @Column(nullable = false)
     private String medicineName;   // Tên thuốc

@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold">Đơn giá (VNĐ)</label>
-                            <input type="number" step="500" th:field="*{price}" class="form-control">
+                            <input type="number" min="0" step="any" th:field="*{price}" class="form-control">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-bold">Số lượng tồn kho</label>

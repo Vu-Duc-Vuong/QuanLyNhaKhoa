@@ -8,48 +8,59 @@
     <style>
         body { background-color: #f8f9fa; }
         .navbar { background-color: #212529 !important; }
-        .nav-link { font-weight: 500 !important; } /* Cố định phông chữ bằng nhau */
+        .nav-link { font-weight: 500 !important; }
         .btn-custom-search { background-color: #198754; color: white; }
         .btn-custom-search:hover { background-color: #157347; color: white; }
-        /* Đồng bộ 100% Navbar theo ảnh mẫu */
-.navbar-dark .navbar-nav .nav-link {
-    color: #ffffff !important;        /* Ép tất cả các chữ đều màu trắng sáng */
-    font-weight: 400 !important;     /* Cố định độ dày nét chữ bằng nhau */
-    opacity: 0.95;                    /* Rõ nét như hình mẫu */
-    padding-left: 12px;
-    padding-right: 12px;
+
+        /* Đồng bộ Navbar */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 400 !important;
+            opacity: 0.95;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        .navbar-dark .navbar-nav .nav-link.active,
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+            font-weight: 400 !important;
+        }
+
+        .navbar .container-fluid,
+        .container {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
+        .navbar-brand {
+            margin-right: 24px !important;
+        }
+
+        /* CSS Chuyên dụng cho Footer chuẩn hệt Ảnh 1 (KHÔNG GẠCH, KHÔNG NỀN) */
+        footer {
+            color: #495057;          /* Màu chữ xám nhẹ chuẩn mẫu */
+            font-size: 14px;         /* Cỡ chữ thanh thoát */
+            background: transparent;/* Nền trong suốt chìm vào body */
+            border: none !important; /* Xóa sạch gạch ngang */
+
+            /* 1. TĂNG/GIẢM ĐỘ ĐẬM CỦA CHỮ */
+    font-weight: 400;         /* 300 (mảnh/nhạt), 400 (bình thường), 600 (hơi đậm), bold (đậm hẳn) */
+
+    /* 2. CHỈNH KHOẢNG CÁCH VỚI ĐÁY MÀN HÌNH */
+    padding-bottom: 15px !important; /* Tăng px nếu muốn chữ nhích cao lên, giảm px nếu muốn sát đáy hơn */
 }
 
-/* Đảm bảo khi chọn (active) hoặc hover không bị thay đổi độ dày phông */
-.navbar-dark .navbar-nav .nav-link.active,
-.navbar-dark .navbar-nav .nav-link:hover {
-    color: #ffffff !important;
-    font-weight: 400 !important;
-}
-/* Ép khoảng cách mép trái/phải về chuẩn 20px giống hệt ảnh mẫu */
-.navbar .container-fluid,
-.container {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-}
-/* 1. Thu hẹp khoảng cách từ "Quản lý Nha khoa" sang "Trang chủ" */
-.navbar-brand {
-    margin-right: 24px !important; /* Đưa về chuẩn ~24px giống mẫu */
-}
-
-/* 2. Chỉnh khoảng cách giữa các chữ menu khít lại đúng như mẫu */
-.navbar-dark .navbar-nav .nav-link {
-    padding-left: 10px !important;  /* Khoảng cách trái/phải mỗi chữ */
-    padding-right: 10px !important;
-}
     </style>
 </head>
-<body>
+
+<!-- 1. Thêm flexbox cho body để đẩy footer xuống đáy nếu ít dữ liệu -->
+<body class="d-flex flex-column min-vh-100">
 
     <!-- Header / Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container-fluid px-2">
-            <a class="navbar-brand " href="#">Quản lý Nha khoa</a>
+            <a class="navbar-brand" href="#">Quản lý Nha khoa</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -71,7 +82,8 @@
         </div>
     </nav>
 
-    <div class="container">
+    <!-- 2. flex-grow-1 giữ cho container chiếm toàn bộ khoảng trống giữa -->
+    <div class="container flex-grow-1">
         <h2 class="fw-bold mb-4">Danh sách thuốc</h2>
 
         <!-- Nút thêm thuốc -->
@@ -101,7 +113,6 @@
                         <th scope="col" style="width: 10%;">Đơn vị tính</th>
                         <th scope="col" style="width: 13%;">Đơn giá (VNĐ)</th>
                         <th scope="col" style="width: 10%;">Số lượng tồn</th>
-                        <!-- CỘT GHI CHÚ BỔ SUNG -->
                         <th scope="col" style="width: 20%;">Ghi chú</th>
                         <th scope="col" style="width: 15%; text-align: center;">Chức năng</th>
                     </tr>
@@ -113,7 +124,6 @@
                         <td th:text="${med.unit}">Viên</td>
                         <td th:text="${#numbers.formatDecimal(med.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">2,000 đ</td>
                         <td th:text="${med.quantity}">100</td>
-                        <!-- HIỂN THỊ DỮ LIỆU GHI CHÚ -->
                         <td class="text-muted fst-italic" th:text="${med.note}">Uống 1-2 viên/lần</td>
                         <td class="text-center">
                             <a th:href="@{/medicine/edit/{id}(id=${med.id})}" class="btn btn-warning btn-sm text-dark me-1 fw-medium">Sửa</a>
@@ -127,11 +137,12 @@
                 </tbody>
             </table>
         </div>
-
-        <footer class="text-center mt-5 mb-4 text-muted small">
-            © N02 Quản lý Nha Khoa
-        </footer>
     </div>
+
+    <!-- 3. Footer dùng mt-auto tự đẩy xuống đáy, py-4 căn khoảng cách cực đẹp giống Ảnh 1 -->
+    <footer class="text-center mt-auto py-4">
+        © N02 Quản lý Nha Khoa
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
