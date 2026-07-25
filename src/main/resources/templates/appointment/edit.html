@@ -16,23 +16,11 @@ rel="stylesheet">
 <body>
 
 
-<!-- Header -->
-<div th:replace="~{layout/header}"></div>
+<!-- Navbar + Sidebar -->
+<div th:replace="~{layout/sidebar}"></div>
 
-
-
-<div class="d-flex">
-
-
-    <!-- Sidebar -->
-    <div th:replace="~{layout/sidebar}"></div>
-
-
-
-
-
-    <!-- Nội dung -->
-    <div class="container mt-4">
+<!-- Nội dung -->
+<div class="container mt-4 flex-grow-1">
 
 
         <h2>Sửa lịch hẹn</h2>
@@ -263,13 +251,10 @@ rel="stylesheet">
 
 </div>
 
-
-
-
-
 <!-- Footer -->
-
-<div th:replace="~{layout/footer}"></div>
+<div class="mt-auto"
+     th:replace="~{layout/footer}">
+</div>
 
 
 

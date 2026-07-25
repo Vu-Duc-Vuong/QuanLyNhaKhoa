@@ -28,12 +28,14 @@ public class PatientService {
 
 
 
+
     // Lưu / cập nhật bệnh nhân
     public Patient savePatient(Patient patient){
 
         return patientRepository.save(patient);
 
     }
+
 
 
 
@@ -48,17 +50,56 @@ public class PatientService {
 
 
 
-    // Xóa bệnh nhân
-    public void deletePatient(Long id){
 
-        patientRepository.deleteById(id);
+
+    // Xóa bệnh nhân
+    // true = xóa thành công
+    // false = không cho xóa
+    public boolean deletePatient(Long id){
+
+
+        Patient patient = patientRepository
+                .findById(id)
+                .orElse(null);
+
+
+
+        if(patient == null){
+
+            return false;
+
+        }
+
+
+
+
+        // Kiểm tra bệnh nhân đã có lịch hẹn chưa
+        if(patient.getAppointments() != null
+                && !patient.getAppointments().isEmpty()){
+
+
+            return false;
+
+        }
+
+
+
+
+
+        patientRepository.delete(patient);
+
+
+        return true;
 
     }
 
 
 
+
+
     // Tìm kiếm bệnh nhân
     public List<Patient> searchPatient(String keyword){
+
 
         return patientRepository
                 .findByPatientCodeContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrPhoneContainingIgnoreCase(
@@ -66,6 +107,7 @@ public class PatientService {
                         keyword,
                         keyword
                 );
+
 
     }
 
