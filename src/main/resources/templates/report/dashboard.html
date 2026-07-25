@@ -8,6 +8,30 @@
 </head>
 <body class="bg-light">
 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 py-2">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/patient">Quản lý Nha khoa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/patient">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/patient">Bệnh nhân</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/appointment">Lịch hẹn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/treatment">Khám bệnh</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/invoice/checkout">Hóa đơn</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold text-white" href="/report">Báo cáo</a></li>
+                </ul>
+                <div class="d-flex align-items-center text-white">
+                    <span class="me-3">vinh</span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="container py-4">
         <h3 class="mb-4 fw-bold text-primary">BÁO CÁO DOANH THU & HÓA ĐƠN</h3>
 
@@ -15,7 +39,7 @@
             <div class="col-md-4">
                 <div class="card bg-success text-white p-3 shadow-sm">
                     <h5>Tổng Doanh Thu</h5>
-                    <h3 class="fw-bold mb-0" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</h3>
+                    <h3 class="fw-bold mb-0" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">600,000 VNĐ</h3>
                 </div>
             </div>
         </div>
@@ -36,10 +60,10 @@
                     </thead>
                     <tbody>
                         <tr th:each="inv : ${invoiceList}">
-                            <td th:text="${'INV-' + inv.id}">INV-1001</td>
-                            <td th:text="${inv.createdDate}">24/07/2026</td>
-                            <td th:text="${inv.patientName}">Nguyễn Văn A</td>
-                            <td class="fw-bold text-success" th:text="${#numbers.formatDecimal(inv.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</td>
+                            <td th:text="${'INV-' + inv.id}">INV-1</td>
+                            <td th:text="${inv.createdDate}">2026-07-25</td>
+                            <td th:text="${inv.patientName}">lonh</td>
+                            <td class="fw-bold text-success" th:text="${#numbers.formatDecimal(inv.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">200,000 VNĐ</td>
                         </tr>
                         <tr th:if="${invoiceList == null or #lists.isEmpty(invoiceList)}">
                             <td colspan="4" class="text-center text-muted py-3">Chưa có dữ liệu hóa đơn</td>

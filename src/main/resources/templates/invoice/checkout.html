@@ -13,9 +13,13 @@
         }
     </style>
 </head>
-<body class="bg-light py-5">
+<body class="d-flex flex-column min-vh-100 bg-light">
 
-    <div class="container" style="max-width: 650px;">
+    <!-- Thanh Menu / Navbar dùng chung -->
+    <div class="no-print" th:replace="~{layout/sidebar}"></div>
+
+    <!-- Nội dung Hóa đơn -->
+    <div class="container py-4 flex-grow-1" style="max-width: 650px;">
         <div class="card shadow-sm border-0 invoice-card">
             <div class="card-header bg-primary text-white text-center py-3">
                 <h4 class="mb-0 fw-bold">NHA KHOA NỤ CƯỜI VIỆT</h4>
@@ -30,7 +34,7 @@
                     </div>
                     <div class="col-6 text-end">
                         <p class="mb-1 text-muted">Ngày lập:</p>
-                        <h6 class="fw-bold text-dark" th:text="${invoice.createdDate}">24/07/2026</h6>
+                        <h6 class="fw-bold text-dark" th:text="${invoice.createdDate}">2026-07-25</h6>
                     </div>
                 </div>
 
@@ -64,13 +68,16 @@
                         <button type="button" onclick="window.print()" class="btn btn-outline-primary">
                             🖨️ In Hóa Đơn / Xuất PDF
                         </button>
-                        <a href="/patient" class="btn btn-outline-secondary">Quay lại danh sách</a>
+                        <a href="/patient" class="btn btn-outline-secondary">Quay lại danh sách bệnh nhân</a>
                     </div>
                 </form>
 
             </div>
         </div>
     </div>
+
+    <!-- Footer dùng chung -->
+    <div class="mt-auto no-print" th:replace="~{layout/footer}"></div>
 
 </body>
 </html>
