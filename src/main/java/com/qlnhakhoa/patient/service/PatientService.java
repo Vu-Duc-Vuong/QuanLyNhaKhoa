@@ -1,11 +1,16 @@
 package com.qlnhakhoa.patient.service;
 
 
+import com.qlnhakhoa.appointment.entity.Appointment;
+import com.qlnhakhoa.appointment.repository.AppointmentRepository;
 import com.qlnhakhoa.patient.entity.Patient;
 import com.qlnhakhoa.patient.repository.PatientRepository;
+import com.qlnhakhoa.treatment.entity.Treatment;
+import com.qlnhakhoa.treatment.repository.TreatmentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +21,12 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private TreatmentRepository treatmentRepository;
 
 
 
@@ -49,11 +60,47 @@ public class PatientService {
 
 
     // Xóa bệnh nhân
-    public void deletePatient(Long id){
+    // true = xóa thành công
+    // false = không cho xóa
+    public boolean deletePatient(Long id){
 
-        patientRepository.deleteById(id);
+
+        Patient patient = patientRepository
+                .findById(id)
+                .orElse(null);
+
+
+
+        if(patient == null){
+
+            return false;
+
+        }
+
+
+
+
+        // Kiểm tra bệnh nhân đã có lịch hẹn chưa
+        if(patient.getAppointments() != null
+                && !patient.getAppointments().isEmpty()){
+
+
+            return false;
+
+        }
+
+
+
+
+
+        patientRepository.delete(patient);
+
+
+        return true;
 
     }
+
+
 
 
 

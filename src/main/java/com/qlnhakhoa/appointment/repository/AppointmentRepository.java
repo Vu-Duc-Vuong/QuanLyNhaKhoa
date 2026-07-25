@@ -40,6 +40,4 @@ public interface AppointmentRepository
             String code,
             String name
     );
-
-
 }

@@ -30,5 +30,8 @@ public interface TreatmentRepository extends JpaRepository<Treatment, Long> {
             String fullName
     );
 
+    // Lấy toàn bộ hồ sơ khám của một bệnh nhân thông qua lịch hẹn
+    List<Treatment> findByAppointment_Patient_Id(Long patientId);
+
 
 }
