@@ -17,18 +17,26 @@ public class ReportController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @GetMapping("/dashboard")
-    public String viewDashboard(Model model) {
-        List<Invoice> invoices = invoiceService.getAllInvoices();
-        
-        // Tính tổng doanh thu từ danh sách hóa đơn
-        double totalRevenue = invoices.stream()
-                .mapToDouble(invoice -> invoice.getTotalAmount() != null ? invoice.getTotalAmount() : 0.0)
-                .sum();
+    @GetMapping
+    public String showReport(Model model) {
+        List<Invoice> invoiceList = null;
+        try {
+            invoiceList = invoiceService.getAllInvoices();
+        } catch (Exception e) {
+            invoiceList = null;
+        }
 
-        model.addAttribute("invoices", invoices);
+        double totalRevenue = 0;
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            for (Invoice inv : invoiceList) {
+                if (inv.getTotalAmount() != null) {
+                    totalRevenue += inv.getTotalAmount();
+                }
+            }
+        }
+
+        model.addAttribute("invoiceList", invoiceList);
         model.addAttribute("totalRevenue", totalRevenue);
-        model.addAttribute("totalCount", invoices.size());
 
         return "report/dashboard";
     }
