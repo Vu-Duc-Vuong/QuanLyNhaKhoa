@@ -7,6 +7,8 @@ import com.qlnhakhoa.appointment.entity.Appointment;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 @Table(name = "patients")
@@ -20,47 +22,48 @@ public class Patient {
 
 
     @Column(unique = true, nullable = false)
-    private String patientCode;      // Mã bệnh nhân
+    private String patientCode;
 
 
 
     @Column(nullable = false)
-    private String fullName;         // Họ tên
+    private String fullName;
 
 
 
-    private LocalDate dateOfBirth;   // Ngày sinh
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfBirth;
 
 
 
-    private String gender;           // Giới tính
+    private String gender;
 
 
 
-    private String phone;            // SĐT
+    private String phone;
 
 
 
-    private String address;          // Địa chỉ
+    private String address;
 
 
 
-    private String cccd;             // CCCD
-
-
-
-    @Column(length = 1000)
-    private String medicalHistory;   // Tiền sử bệnh
+    private String cccd;
 
 
 
     @Column(length = 1000)
-    private String allergy;          // Dị ứng
+    private String medicalHistory;
 
 
 
     @Column(length = 1000)
-    private String reason;           // Lý do đến khám
+    private String allergy;
+
+
+
+    @Column(length = 1000)
+    private String reason;
 
 
 
@@ -146,9 +149,9 @@ public class Patient {
     }
 
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+   public void setAddress(String address) {
+    this.address = address;
+}
 
 
 

@@ -23,6 +23,7 @@
                    required>
         </div>
 
+
         <div class="mb-3">
             <label>Họ tên</label>
             <input type="text"
@@ -31,69 +32,106 @@
                    required>
         </div>
 
+
         <div class="mb-3">
             <label>Ngày sinh</label>
-            <input type="date"
+
+            <input type="text"
                    name="dateOfBirth"
-                   class="form-control">
+                   class="form-control"
+                   placeholder="dd/MM/yyyy"
+                   maxlength="10"
+                   pattern="\d{2}/\d{2}/\d{4}">
+            
+            <small class="text-muted">
+                Ví dụ: 23/03/2026
+            </small>
+
         </div>
+
 
         <div class="mb-3">
             <label>Giới tính</label>
 
             <select name="gender" class="form-control">
-                <option>Nam</option>
-                <option>Nữ</option>
+
+                <option value="Nam">
+                    Nam
+                </option>
+
+                <option value="Nữ">
+                    Nữ
+                </option>
+
             </select>
 
         </div>
 
+
         <div class="mb-3">
             <label>Số điện thoại</label>
+
             <input type="text"
                    name="phone"
                    class="form-control">
         </div>
 
+
         <div class="mb-3">
             <label>Địa chỉ</label>
+
             <input type="text"
                    name="address"
                    class="form-control">
         </div>
 
+
         <div class="mb-3">
             <label>CCCD</label>
+
             <input type="text"
                    name="cccd"
                    class="form-control">
         </div>
 
+
         <div class="mb-3">
             <label>Tiền sử bệnh</label>
+
             <textarea name="medicalHistory"
                       class="form-control"></textarea>
+
         </div>
+
 
         <div class="mb-3">
             <label>Dị ứng</label>
+
             <textarea name="allergy"
                       class="form-control"></textarea>
+
         </div>
+
 
         <div class="mb-3">
             <label>Lý do khám</label>
+
             <textarea name="reason"
                       class="form-control"></textarea>
+
         </div>
+
 
         <button class="btn btn-success">
             Lưu
         </button>
 
-        <a href="/patient" class="btn btn-secondary">
+
+        <a href="/patient"
+           class="btn btn-secondary">
             Quay lại
         </a>
+
 
     </form>
 
