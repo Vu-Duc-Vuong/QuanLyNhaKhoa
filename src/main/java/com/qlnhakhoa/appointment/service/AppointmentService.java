@@ -32,13 +32,25 @@ public class AppointmentService {
 
 
 
-    // Lưu lịch hẹn
-    public Appointment saveAppointment(Appointment appointment){
+public Appointment saveAppointment(Appointment appointment) {
 
-        return appointmentRepository.save(appointment);
+    if (appointment.getId() == null) {
 
+        String code = appointment.getAppointmentCode().trim();
+
+        if (!code.startsWith("LH-")) {
+            code = "LH-" + code;
+        }
+
+        if (appointmentRepository.existsByAppointmentCode(code)) {
+            throw new RuntimeException("Mã lịch hẹn đã tồn tại.");
+        }
+
+        appointment.setAppointmentCode(code);
     }
 
+    return appointmentRepository.save(appointment);
+}
 
 
     // Lấy lịch hẹn theo id

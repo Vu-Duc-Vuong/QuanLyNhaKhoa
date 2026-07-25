@@ -203,20 +203,31 @@ public class AppointmentController {
 
 
 
-    // Xóa lịch hẹn
     @GetMapping("/appointment/delete/{id}")
-    public String deleteAppointment(
-            @PathVariable Long id){
+public String deleteAppointment(
+        @PathVariable Long id,
+        org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
 
-
+    try {
 
         appointmentService.deleteAppointment(id);
 
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Xóa lịch hẹn thành công."
+        );
 
+    } catch (org.springframework.dao.DataIntegrityViolationException e) {
 
-        return "redirect:/appointment";
+        redirectAttributes.addFlashAttribute(
+                "error",
+                "Không thể xóa lịch hẹn vì đã có hồ sơ điều trị."
+        );
 
     }
+
+    return "redirect:/appointment";
+}
     // Tìm kiếm lịch hẹn
     @GetMapping("/appointment/search")
     public String searchAppointment(

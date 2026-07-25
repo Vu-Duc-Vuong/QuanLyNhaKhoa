@@ -1,22 +1,17 @@
 package com.qlnhakhoa.appointment.repository;
 
-
 import com.qlnhakhoa.appointment.entity.Appointment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-
 @Repository
-public interface AppointmentRepository 
+public interface AppointmentRepository
         extends JpaRepository<Appointment, Long> {
-
-
 
     // Kiểm tra trùng lịch
     boolean existsByAppointmentDateAndAppointmentTime(
@@ -24,7 +19,8 @@ public interface AppointmentRepository
             LocalTime time
     );
 
-
+    // Kiểm tra trùng mã lịch hẹn
+    boolean existsByAppointmentCode(String appointmentCode);
 
     // Tìm lịch theo ngày
     List<Appointment> findByAppointmentDate(
@@ -34,12 +30,9 @@ public interface AppointmentRepository
     // Tìm theo trạng thái lịch hẹn
     List<Appointment> findByStatus(String status);
 
-
     // Tìm kiếm theo mã lịch hoặc tên bệnh nhân
     List<Appointment> findByAppointmentCodeContainingIgnoreCaseOrPatientFullNameContainingIgnoreCase(
             String code,
             String name
     );
-
-
 }
