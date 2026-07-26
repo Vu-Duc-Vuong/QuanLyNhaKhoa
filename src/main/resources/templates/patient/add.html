@@ -41,16 +41,9 @@
         <div class="mb-3">
             <label>Ngày sinh</label>
 
-            <input type="text"
+            <input type="date"
                    th:field="*{dateOfBirth}"
-                   class="form-control"
-                   placeholder="dd/MM/yyyy"
-                   maxlength="10"
-                   pattern="\d{2}/\d{2}/\d{4}">
-
-            <small class="text-muted">
-                Ví dụ: 23/03/2026
-            </small>
+                   class="form-control">
         </div>
 
         <div class="mb-3">

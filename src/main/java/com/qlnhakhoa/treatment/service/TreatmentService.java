@@ -180,6 +180,8 @@ public class TreatmentService {
         item.setTreatment(treatment);
         prescriptionItemRepository.save(item);
 
+        recalculateAndSaveTotal(treatment);
+
     }
 
 
@@ -187,7 +189,18 @@ public class TreatmentService {
     @Transactional
     public void deletePrescriptionItem(Long itemId) {
 
-        prescriptionItemRepository.deleteById(itemId);
+        prescriptionItemRepository.findById(itemId)
+                .ifPresent(item -> {
+
+                    Treatment treatment = item.getTreatment();
+
+                    prescriptionItemRepository.deleteById(itemId);
+
+                    if (treatment != null) {
+                        recalculateAndSaveTotal(treatment);
+                    }
+
+                });
 
     }
 
@@ -245,13 +258,19 @@ public class TreatmentService {
 
 
     // Tính lại tổng tiền dựa trên dữ liệu THẬT trong DB (không dùng list trong bộ nhớ của Treatment)
+    // Tổng tiền khám = tổng tiền thuốc + tổng tiền dịch vụ
     private void recalculateAndSaveTotal(Treatment treatment) {
 
-        List<ServiceOrderItem> items = serviceOrderItemRepository.findByTreatmentId(treatment.getId());
+        List<ServiceOrderItem> serviceItems = serviceOrderItemRepository.findByTreatmentId(treatment.getId());
+        List<PrescriptionItem> prescriptionItems = prescriptionItemRepository.findByTreatmentId(treatment.getId());
 
         double total = 0.0;
 
-        for (ServiceOrderItem item : items) {
+        for (ServiceOrderItem item : serviceItems) {
+            total += item.getLineTotal();
+        }
+
+        for (PrescriptionItem item : prescriptionItems) {
             total += item.getLineTotal();
         }
 
