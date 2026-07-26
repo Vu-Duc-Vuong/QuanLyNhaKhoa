@@ -53,7 +53,7 @@
 
                     <h5>Tổng bệnh nhân</h5>
 
-                    <h2>120</h2>
+                    <h2 th:text="${totalPatients != null ? totalPatients : 0}">0</h2>
 
                 </div>
 
@@ -73,7 +73,7 @@
 
                     <h5>Lịch hẹn hôm nay</h5>
 
-                    <h2>18</h2>
+                    <h2 th:text="${todayAppointments != null ? todayAppointments : 0}">0</h2>
 
                 </div>
 
@@ -93,7 +93,7 @@
 
                     <h5>Đang chờ khám</h5>
 
-                    <h2>8</h2>
+                    <h2 th:text="${waitingAppointments != null ? waitingAppointments : 0}">0</h2>
 
                 </div>
 
@@ -113,7 +113,7 @@
 
                     <h5>Doanh thu</h5>
 
-                    <h2>5.2M</h2>
+                    <h2 th:text="${revenue != null ? #numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}">0 VNĐ</h2>
 
                 </div>
 

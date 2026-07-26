@@ -28,10 +28,12 @@ public class SecurityConfig {
 
 
 
+
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http
     ) throws Exception {
+
 
 
         http
@@ -39,9 +41,11 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
 
 
+
         .authorizeHttpRequests(auth -> auth
 
 
+                // Những trang không cần đăng nhập
                 .requestMatchers(
                         "/register",
                         "/login",
@@ -53,6 +57,8 @@ public class SecurityConfig {
                 .permitAll()
 
 
+
+                // Các trang còn lại bắt buộc đăng nhập
                 .anyRequest()
                 .authenticated()
 
@@ -62,16 +68,21 @@ public class SecurityConfig {
 
         .formLogin(form -> form
 
-        .loginPage("/login")
 
-        // Sai tài khoản hoặc mật khẩu
-        .failureUrl("/login?error=true")
+                .loginPage("/login")
 
-        .defaultSuccessUrl("/home", true)
 
-        .permitAll()
+                // Sai tài khoản hoặc mật khẩu
+                .failureUrl("/login?error=true")
 
-)
+
+                // Đăng nhập thành công
+                .defaultSuccessUrl("/home", true)
+
+
+                .permitAll()
+
+        )
 
 
 
@@ -80,11 +91,14 @@ public class SecurityConfig {
 
                 .logoutUrl("/logout")
 
+
                 .logoutSuccessUrl("/login?logout")
+
 
                 .permitAll()
 
         );
+
 
 
         return http.build();
