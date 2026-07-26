@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
 
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand fw-bold" href="/">
             Quản lý Nha khoa
         </a>
 
@@ -45,14 +45,12 @@
                     </a>
                 </li>
 
-                <!-- SỬA 1: Đổi /invoice thành /invoice/checkout -->
                 <li class="nav-item">
                     <a href="/invoice/checkout" class="nav-link text-white">
                         Hóa đơn
                     </a>
                 </li>
 
-                <!-- SỬA 2: Để /report (kết hợp với việc bỏ /dashboard ở ReportController) -->
                 <li class="nav-item">
                     <a href="/report" class="nav-link text-white">
                         Báo cáo
@@ -61,14 +59,14 @@
 
             </ul>
 
-            <!-- Hiển thị tài khoản đăng nhập -->
+            <!-- Hiển thị tài khoản đăng nhập an toàn -->
             <span class="text-white me-3">
-                <span th:text="${#authentication.name}">
+                <span th:text="${#authentication != null ? #authentication.name : 'User'}">
                     User
                 </span>
             </span>
 
-            <a href="/logout" class="btn btn-outline-light">
+            <a th:href="@{/logout}" class="btn btn-outline-light">
                 Đăng xuất
             </a>
 

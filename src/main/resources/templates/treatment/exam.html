@@ -35,7 +35,7 @@
         <!-- ================= CHẨN ĐOÁN ================= -->
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-header bg-dark text-white fw-bold">
-                🩺 Chẩn đoán bệnh
+                Chẩn đoán bệnh
             </div>
             <div class="card-body">
                 <form th:action="@{/treatment/{id}/diagnosis(id=${treatment.id})}" method="post">
@@ -54,18 +54,15 @@
                         <textarea name="note" class="form-control" rows="2" th:text="${treatment.note}"></textarea>
                     </div>
 
-                    <button class="btn btn-primary fw-bold">💾 Lưu chẩn đoán</button>
+                    <button class="btn btn-primary fw-bold">Lưu chẩn đoán</button>
                 </form>
             </div>
         </div>
 
         <!-- ================= KÊ THUỐC ================= -->
-        <div class="card mb-4 shadow-sm border-0 exam-card">
-            <div class="card-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <span>💊 Kê đơn thuốc</span>
-                    <span class="badge bg-white text-primary fs-7">Danh mục thuốc: <span th:text="${medicines != null ? medicines.size() : 0}"></span></span>
-                </div>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                Kê đơn thuốc
             </div>
             <div class="card-body">
                 <div class="row gy-4">
@@ -183,44 +180,44 @@
         </div>
 
         <!-- ================= CHỈ ĐỊNH DỊCH VỤ ================= -->
-        <div class="card mb-4 shadow-sm border-0 service-card">
-            <div class="card-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <span>🛠️ Chỉ định dịch vụ</span>
-                    <span class="badge bg-white text-primary fs-7">Số dịch vụ: <span th:text="${treatment.serviceOrderItems != null ? treatment.serviceOrderItems.size() : 0}"></span></span>
-                </div>
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                Chỉ định dịch vụ
             </div>
             <div class="card-body">
-                <div class="row gy-4">
-                    <div class="col-lg-8">
-                        <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
-                            <table class="table table-bordered table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Tên dịch vụ</th>
-                                        <th>Đơn giá</th>
-                                        <th>SL</th>
-                                        <th>Thành tiền</th>
-                                        <th>Ghi chú</th>
-                                        <th class="text-center">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="s : ${treatment.serviceOrderItems}">
-                                        <td th:text="${s.serviceName}"></td>
-                                        <td th:text="${s.price}"></td>
-                                        <td th:text="${s.quantity}"></td>
-                                        <td th:text="${s.lineTotal}"></td>
-                                        <td th:text="${s.note}"></td>
-                                        <td class="text-center">
-                                            <a th:href="@{/treatment/{id}/service/delete/{itemId}(id=${treatment.id},itemId=${s.id})}"
-                                               class="btn btn-outline-danger btn-sm"
-                                               onclick="return confirm('Xóa dịch vụ này?')">Xóa</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tên dịch vụ</th>
+                            <th>Đơn giá</th>
+                            <th>SL</th>
+                            <th>Thành tiền</th>
+                            <th>Ghi chú</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s : ${treatment.serviceOrderItems}">
+                            <td th:text="${s.serviceName}"></td>
+                            <td th:text="${#numbers.formatDecimal(s.price != null ? s.price : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                            <td th:text="${s.quantity}"></td>
+                            <td th:text="${#numbers.formatDecimal(s.lineTotal != null ? s.lineTotal : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                            <td th:text="${s.note}"></td>
+                            <td class="text-center">
+                                <a th:href="@{/treatment/{id}/service/delete/{itemId}(id=${treatment.id},itemId=${s.id})}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Xóa dịch vụ này?')">Xóa</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-2">
+                    <div class="col-md-4">
+                        <input type="text" name="serviceName" class="form-control" placeholder="Tên dịch vụ (vd: Nhổ răng...)" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" step="1000" name="price" class="form-control" placeholder="Đơn giá">
                     </div>
                     <div class="col-lg-4">
                         <div class="input-form-section">
@@ -255,19 +252,29 @@
                             <div class="text-muted small">Đơn vị: VNĐ</div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-3">
+                        <input type="text" name="note" class="form-control" placeholder="Ghi chú">
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-success w-100 fw-bold">+</button>
+                    </div>
+                </form>
+
+                <p class="text-end fw-bold mt-3 fs-5 text-danger">
+                    Tổng tiền dịch vụ: <span th:text="${#numbers.formatDecimal(treatment.totalAmount != null ? treatment.totalAmount : 0, 0, 'COMMA', 0, 'POINT')}">0</span> đ
+                </p>
             </div>
         </div>
 
         <!-- ================= HOÀN TẤT KHÁM & TẠO HÓA ĐƠN ================= -->
         <div class="d-flex justify-content-between mb-5">
-            <a href="/treatment" class="btn btn-secondary fw-bold">← Quay lại danh sách chờ</a>
+            <a href="/treatment" class="btn btn-secondary fw-bold">Quay lại danh sách chờ</a>
 
-            <!-- Nút Hoàn tất khám luôn luôn hiển thị chuẩn 100% -->
+            <!-- Nút Hoàn tất khám -->
             <form th:action="@{/treatment/{id}/complete(id=${treatment.id})}" method="post">
                 <button type="submit" class="btn btn-success btn-lg fw-bold shadow"
                         onclick="return confirm('Xác nhận hoàn tất khám? Hệ thống sẽ tạo hóa đơn và chuyển sang trang thanh toán.')">
-                    ✅ Hoàn Tắt Khám & Tạo Hóa Đơn
+                    Hoàn Tất Khám & Tạo Hóa Đơn
                 </button>
             </form>
         </div>

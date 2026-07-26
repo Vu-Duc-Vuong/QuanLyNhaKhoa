@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.time.LocalDate;
@@ -39,10 +40,26 @@ public class DashboardController {
 
 
     @GetMapping("/home")
-    public String dashboard(Model model){
+    public String dashboard(
+            @RequestParam(required = false) String date,
+            Model model
+    ){
 
 
-        LocalDate today = LocalDate.now();
+        LocalDate selectedDate;
+
+
+        if(date != null && !date.isEmpty()){
+
+            selectedDate = LocalDate.parse(date);
+
+        }else{
+
+            selectedDate = LocalDate.now();
+
+        }
+
+
 
 
 
@@ -53,20 +70,26 @@ public class DashboardController {
 
 
 
-        // Lịch hôm nay
-        List<Appointment> todayAppointmentList =
+
+        // Lịch theo ngày đang chọn
+        List<Appointment> appointmentList =
                 appointmentRepository
-                        .findByAppointmentDateOrderByAppointmentTimeAsc(today);
+                        .findByAppointmentDateOrderByAppointmentTimeAsc(
+                                selectedDate
+                        );
 
 
 
-        // Đang chờ khám hôm nay
+
+
+        // Lịch đang chờ khám trong ngày
         List<Appointment> waitingList =
                 appointmentRepository
                         .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
-                                today,
+                                selectedDate,
                                 "Chờ khám"
                         );
+
 
 
 
@@ -78,7 +101,9 @@ public class DashboardController {
 
 
         if(revenue == null){
+
             revenue = 0.0;
+
         }
 
 
@@ -93,7 +118,7 @@ public class DashboardController {
 
         model.addAttribute(
                 "todayAppointments",
-                todayAppointmentList.size()
+                appointmentList.size()
         );
 
 
@@ -104,14 +129,15 @@ public class DashboardController {
 
 
         model.addAttribute(
-                "today",
-                today
+                "appointmentList",
+                appointmentList
         );
 
 
+        // ngày đang xem
         model.addAttribute(
-                "appointmentList",
-                todayAppointmentList
+                "selectedDate",
+                selectedDate
         );
 
 

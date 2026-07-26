@@ -37,9 +37,10 @@
                             <td class="text-center" th:text="${'BN-' + inv.patientId}">BN-1</td>
                             <td class="fw-bold" th:text="${inv.patientName}">Nguyễn Văn A</td>
                             <td>
+                                <!-- Đã xóa icon 🛠️ -->
                                 <span class="badge bg-light text-dark border p-2" 
                                       th:text="${inv.itemsSummary != null ? inv.itemsSummary : 'Khám tổng quát'}">
-                                    🛠️ Nhổ răng
+                                    Nhổ răng
                                 </span>
                             </td>
                             <td class="text-end text-danger fw-bold" 
@@ -49,8 +50,9 @@
                                 <span th:if="${inv.paymentStatus != 'PAID'}" class="badge bg-warning text-dark">Chưa Thanh Toán</span>
                             </td>
                             <td class="text-center">
+                                <!-- Đã xóa icon 👁️ -->
                                 <a th:href="@{/invoice/checkout/{id}(id=${inv.id})}" class="btn btn-sm btn-primary fw-bold">
-                                    👁️ Xem / Thanh Toán
+                                    Xem / Thanh Toán
                                 </a>
                             </td>
                         </tr>
