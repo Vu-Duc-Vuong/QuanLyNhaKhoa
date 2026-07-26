@@ -52,24 +52,23 @@ public class DashboardController {
 
 
 
-        // Lịch hẹn hôm nay
-        long todayAppointments =
-                appointmentRepository
-                        .findByAppointmentDate(
-                                LocalDate.now()
-                        )
-                        .size();
+       long todayAppointments =
+        appointmentRepository
+                .findByAppointmentDateOrderByAppointmentTimeAsc(
+                        LocalDate.now()
+                )
+                .size();
 
 
 
 
-
-        // Đang chờ khám
-        long waitingAppointments =
-                appointmentRepository
-                        .findByStatus("Chờ khám")
-                        .size();
-
+long waitingAppointments =
+        appointmentRepository
+                .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
+                        LocalDate.now(),
+                        "Chờ khám"
+                )
+                .size();
 
 
 
