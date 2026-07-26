@@ -8,37 +8,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #f8f9fa; }
-        .card-stat { border-radius: 12px; transition: transform 0.2s; }
-        .card-stat:hover { transform: translateY(-3px); }
+        .table-dark-custom th { background-color: #212529 !important; color: #ffffff !important; }
+        .card-stat { border-radius: 6px; }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR TỰ CÓ -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/"><i class="fa-solid fa-tooth me-2"></i>NHA KHOA CARE</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/patient">Bệnh Nhân</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/appointment">Lịch Hẹn</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/invoice">Hóa Đơn</a></li>
-                    <li class="nav-item"><a class="nav-link active fw-bold" href="/report">Báo Cáo</a></li>
+    <!-- NAVBAR CHUẨN THEO TEAM (NỀN ĐEN - ĐẦY ĐỦ MENU) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold me-4" href="/">Quản lý Nha khoa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-white" href="/">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/patient">Bệnh nhân</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/appointment">Lịch hẹn</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/treatment">Khám bệnh</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/medicine">Thuốc</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/invoice">Hóa đơn</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold active" href="/report">Báo cáo</a></li>
                 </ul>
+                <div class="d-flex align-items-center text-white">
+                    <span class="me-3">vinh</span>
+                    <a href="/logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container py-2">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold text-dark m-0"><i class="fa-solid fa-chart-line text-primary me-2"></i> Báo Cáo Doanh Thu</h3>
+            <h2 class="fw-bold text-dark m-0">Báo cáo doanh thu</h2>
             <button onclick="window.print()" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-print me-1"></i> In báo cáo</button>
         </div>
 
         <!-- THỐNG KÊ DOANH THU -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <div class="card card-stat bg-primary text-white shadow-sm border-0">
+                <div class="card card-stat bg-primary text-white border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Tổng Doanh Thu</div>
                         <h3 class="fw-bold mb-0" th:text="${#numbers.formatDecimal(totalRevenue != null ? totalRevenue : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</h3>
@@ -47,7 +57,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card card-stat bg-success text-white shadow-sm border-0">
+                <div class="card card-stat bg-success text-white border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Doanh Thu Hôm Nay</div>
                         <h3 class="fw-bold mb-0" th:text="${#numbers.formatDecimal(todayRevenue != null ? todayRevenue : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</h3>
@@ -56,7 +66,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card card-stat bg-info text-white shadow-sm border-0">
+                <div class="card card-stat bg-info text-white border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Tổng Hóa Đơn</div>
                         <h3 class="fw-bold mb-0" th:text="${totalInvoices != null ? totalInvoices : 0}">0</h3>
@@ -65,7 +75,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card card-stat bg-warning text-dark shadow-sm border-0">
+                <div class="card card-stat bg-warning text-dark border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-dark-50 small font-weight-bold text-uppercase mb-1">Hóa Đơn Đã Thu</div>
                         <h3 class="fw-bold mb-0" th:text="${paidInvoices != null ? paidInvoices : 0}">0</h3>
@@ -74,45 +84,40 @@
             </div>
         </div>
 
-        <!-- BẢNG CHI TIẾT HÓA ĐƠN -->
-        <div class="card shadow-sm border-0 rounded-3">
-            <div class="card-header bg-white py-3">
-                <h5 class="m-0 font-weight-bold text-primary"><i class="fa-solid fa-list me-2"></i>Danh Sách Giao Dịch</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="text-center">Mã HĐ</th>
-                                <th class="text-center">Mã BN</th>
-                                <th>Tên Bệnh Nhân</th>
-                                <th>Nội Dung / Dịch Vụ</th>
-                                <th class="text-end">Số Tiền</th>
-                                <th class="text-center">Trạng Thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="inv : ${invoiceList}">
-                                <td class="text-center fw-bold" th:text="${'INV-' + (inv.id != null ? inv.id : 0)}">INV-1</td>
-                                <td class="text-center" th:text="${'BN-' + (inv.patientId != null ? inv.patientId : 0)}">BN-101</td>
-                                <td class="fw-semibold" th:text="${inv.patientName != null ? inv.patientName : 'Khách lẻ'}">Nguyễn Văn A</td>
-                                <td>
-                                    <small class="text-muted" th:text="${inv.itemsSummary != null && !inv.itemsSummary.empty ? inv.itemsSummary : 'Dịch vụ nha khoa'}">Khám răng</small>
-                                </td>
-                                <td class="text-end fw-bold text-success" th:text="${#numbers.formatDecimal(inv.amount != null ? inv.amount : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
-                                <td class="text-center">
-                                    <span th:if="${inv.paymentStatus == 'PAID'}" class="badge bg-success">Đã thanh toán</span>
-                                    <span th:if="${inv.paymentStatus != 'PAID'}" class="badge bg-warning text-dark">Chưa thanh toán</span>
-                                </td>
-                            </tr>
+        <!-- BẢNG THEO PHONG CÁCH NỀN ĐEN CỦA NHÓM -->
+        <div class="bg-white shadow-sm border">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark-custom">
+                        <tr>
+                            <th class="py-3 px-3">Mã HĐ</th>
+                            <th class="py-3 px-3">Mã BN</th>
+                            <th class="py-3 px-3">Tên Bệnh Nhân</th>
+                            <th class="py-3 px-3">Nội Dung / Dịch Vụ</th>
+                            <th class="py-3 px-3 text-end">Số Tiền</th>
+                            <th class="py-3 px-3 text-center">Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="inv : ${invoiceList}">
+                            <td class="px-3 fw-bold" th:text="${'INV-' + (inv.id != null ? inv.id : 0)}">INV-1</td>
+                            <td class="px-3" th:text="${'BN-' + (inv.patientId != null ? inv.patientId : 0)}">BN-101</td>
+                            <td class="px-3 fw-semibold" th:text="${inv.patientName != null ? inv.patientName : 'Khách lẻ'}">Nguyễn Văn A</td>
+                            <td class="px-3">
+                                <small class="text-muted" th:text="${inv.itemsSummary != null && !inv.itemsSummary.empty ? inv.itemsSummary : 'Dịch vụ nha khoa'}">Khám răng</small>
+                            </td>
+                            <td class="px-3 text-end fw-bold text-success" th:text="${#numbers.formatDecimal(inv.amount != null ? inv.amount : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                            <td class="px-3 text-center">
+                                <span th:if="${inv.paymentStatus == 'PAID'}" class="badge bg-success">Đã thanh toán</span>
+                                <span th:if="${inv.paymentStatus != 'PAID'}" class="badge bg-warning text-dark">Chưa thanh toán</span>
+                            </td>
+                        </tr>
 
-                            <tr th:if="${invoiceList == null or #lists.isEmpty(invoiceList)}">
-                                <td colspan="6" class="text-center text-muted py-4">Chưa có dữ liệu hóa đơn nào.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <tr th:if="${invoiceList == null or #lists.isEmpty(invoiceList)}">
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có dữ liệu hóa đơn nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
