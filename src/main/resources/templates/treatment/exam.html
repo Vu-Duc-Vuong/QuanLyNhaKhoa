@@ -101,7 +101,7 @@
                         </div>
                         <div class="mt-3 d-flex justify-content-between align-items-center px-2">
                             <div class="text-muted">Tổng số dòng thuốc: <strong th:text="${treatment.prescriptionItems != null ? treatment.prescriptionItems.size() : 0}">0</strong></div>
-                            <div class="fw-bold fs-5 text-danger">Tổng tiền thuốc: <span>---</span></div>
+                            <div class="fw-bold fs-5 text-danger">Tổng tiền thuốc: <span th:text="${#numbers.formatDecimal(treatment.prescriptionItems != null and !treatment.prescriptionItems.isEmpty() ? #aggregates.sum(treatment.prescriptionItems.![lineTotal]) : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span></div>
                         </div>
                     </div>
 
@@ -212,56 +212,38 @@
                     </tbody>
                 </table>
 
-                <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-2">
+                <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-2 align-items-end">
                     <div class="col-md-4">
+                        <label class="form-label fw-semibold">Tên dịch vụ</label>
                         <input type="text" name="serviceName" class="form-control" placeholder="Tên dịch vụ (vd: Nhổ răng...)" required>
                     </div>
                     <div class="col-md-2">
-                        <input type="number" step="1000" name="price" class="form-control" placeholder="Đơn giá">
+                        <label class="form-label fw-semibold">Đơn giá</label>
+                        <input type="number" step="1000" min="0" name="price" class="form-control" value="0" placeholder="Đơn giá" required>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="input-form-section">
-                            <h5 class="fw-bold">Thêm dịch vụ</h5>
-                            <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-3">
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold">Tên dịch vụ</label>
-                                    <input type="text" name="serviceName" class="form-control" placeholder="Nhổ răng, cạo vôi..." required>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold">Đơn giá</label>
-                                    <input type="number" step="1000" min="0" name="price" class="form-control" value="0" placeholder="Đơn giá" required>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label fw-semibold">Số lượng</label>
-                                    <input type="number" name="quantity" min="1" class="form-control" value="1" placeholder="Số lượng" required>
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label fw-semibold">Ghi chú</label>
-                                    <input type="text" name="note" class="form-control" placeholder="Ghi chú">
-                                </div>
-                                <div class="col-12 text-end">
-                                    <button class="btn btn-primary btn-add">Thêm dịch vụ</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="mt-4 p-3 rounded-4 border border-2 border-primary bg-white shadow-sm">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-semibold">Tổng tiền dịch vụ</span>
-                                <span class="fw-bold text-danger" th:text="${treatment.totalAmount != null ? treatment.totalAmount : 0}">0</span>
-                            </div>
-                            <div class="text-muted small">Đơn vị: VNĐ</div>
-                        </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Số lượng</label>
+                        <input type="number" name="quantity" min="1" class="form-control" value="1" placeholder="Số lượng" required>
                     </div>
                     <div class="col-md-3">
+                        <label class="form-label fw-semibold">Ghi chú</label>
                         <input type="text" name="note" class="form-control" placeholder="Ghi chú">
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-success w-100 fw-bold">+</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">+</button>
                     </div>
                 </form>
 
+                <div class="mt-3 p-3 rounded-4 border border-2 border-primary bg-white shadow-sm" style="max-width: 320px; margin-left: auto;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-semibold">Tổng tiền dịch vụ</span>
+                        <span class="fw-bold text-danger" th:text="${#numbers.formatDecimal(treatment.serviceOrderItems != null and !treatment.serviceOrderItems.isEmpty() ? #aggregates.sum(treatment.serviceOrderItems.![lineTotal]) : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                    <div class="text-muted small">Đơn vị: VNĐ</div>
+                </div>
+
                 <p class="text-end fw-bold mt-3 fs-5 text-danger">
-                    Tổng tiền dịch vụ: <span th:text="${#numbers.formatDecimal(treatment.totalAmount != null ? treatment.totalAmount : 0, 0, 'COMMA', 0, 'POINT')}">0</span> đ
+                    Tổng tiền khám: <span th:text="${#numbers.formatDecimal((treatment.prescriptionItems != null and !treatment.prescriptionItems.isEmpty() ? #aggregates.sum(treatment.prescriptionItems.![lineTotal]) : 0) + (treatment.serviceOrderItems != null and !treatment.serviceOrderItems.isEmpty() ? #aggregates.sum(treatment.serviceOrderItems.![lineTotal]) : 0), 0, 'COMMA', 0, 'POINT')}">0</span> đ
                 </p>
             </div>
         </div>
