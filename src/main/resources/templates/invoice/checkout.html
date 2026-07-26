@@ -66,22 +66,41 @@
                     </span>
                 </div>
 
-                <div class="text-center my-4">
+                <!-- 1. HIỂN THỊ NẾU ĐÃ THANH TOÁN -->
+                <div th:if="${invoice != null && invoice.paymentStatus == 'PAID'}" class="alert alert-success text-center py-3 my-4 fw-bold fs-5">
+                    Hóa đơn này đã được thanh toán thành công
+                </div>
+
+                <!-- 2. HIỂN THỊ MÃ QR NẾU CHƯA THANH TOÁN -->
+                <div th:if="${invoice == null || invoice.paymentStatus != 'PAID'}" class="text-center my-4">
                     <p class="fw-bold text-muted mb-2">Quét mã QR để chuyển khoản:</p>
-                    <img th:src="@{'https://api.vietqr.io/image/970422-0987654321-compact2.jpg?amount=' + ${invoice != null ? invoice.amount : 0} + '&addInfo=Thanh%20toan%20hoa%20don%20' + ${invoice != null ? invoice.id : 0}}"
+                    <img th:src="@{'https://api.vietqr.io/image/970422-0987654321-compact2.jpg?amount=' + ${#numbers.formatDecimal(invoice != null ? invoice.amount : 0, 0, 0)} + '&addInfo=Thanh%20toan%20hoa%20don%20INV-' + ${invoice != null ? invoice.id : 0}}"
                          alt="Mã QR Thanh Toán VietQR" 
                          class="qr-code-img img-fluid shadow-sm">
                 </div>
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
-                    <a href="/treatment" class="btn btn-outline-secondary fw-bold px-4">
-                        ← Quay lại
+                    <a th:href="@{/invoice}" class="btn btn-outline-secondary fw-bold px-4 d-flex align-items-center justify-content-center">
+                        Quay lại
                     </a>
-                    <form th:action="@{/invoice/pay/{id}(id=${invoice != null ? invoice.id : 0})}" method="post">
-                        <button type="submit" class="btn btn-success fw-bold px-4 fs-5 shadow">
-                            ✅ Xác Nhận Đã Thanh Toán
-                        </button>
-                    </form>
+                    
+                    <div class="d-flex gap-2">
+                        <!-- NÚT XÓA HÓA ĐƠN NẾU ADMIN GHI NHẦM -->
+                        <a th:if="${invoice != null}" 
+                           th:href="@{/invoice/delete/{id}(id=${invoice.id})}" 
+                           onclick="return confirm('Xác nhận xóa hóa đơn này do ghi nhầm?');" 
+                           class="btn btn-outline-danger fw-bold px-3 d-flex align-items-center">
+                            Xóa Hóa Đơn (Ghi Nhầm)
+                        </a>
+
+                        <!-- CHỈ HIỂN THỊ NÚT XÁC NHẬN KHI CHƯA THANH TOÁN -->
+                        <form th:if="${invoice == null || invoice.paymentStatus != 'PAID'}" 
+                              th:action="@{/invoice/pay/{id}(id=${invoice != null ? invoice.id : 0})}" method="post" class="m-0">
+                            <button type="submit" class="btn btn-success fw-bold px-4 fs-5 shadow">
+                                Xác Nhận Đã Thanh Toán
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
             </div>

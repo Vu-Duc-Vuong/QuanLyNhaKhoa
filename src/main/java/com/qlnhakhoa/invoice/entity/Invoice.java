@@ -1,7 +1,7 @@
 package com.qlnhakhoa.invoice.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "invoices")
@@ -18,14 +18,16 @@ public class Invoice {
     private Double amount = 0.0;
 
     private String paymentStatus = "UNPAID";
-    private LocalDate createdDate = LocalDate.now();
+    
+    // Đổi sang LocalDateTime để lưu Ngày & Giờ
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @Column(length = 1000)
     private String itemsSummary;
 
     // Constructor 1: Mặc định (bắt buộc cho JPA)
     public Invoice() {
-        this.createdDate = LocalDate.now();
+        this.createdDate = LocalDateTime.now();
         this.paymentStatus = "UNPAID";
     }
 
@@ -35,15 +37,15 @@ public class Invoice {
         this.patientName = patientName;
         this.amount = amount != null ? amount : 0.0;
         this.paymentStatus = "UNPAID";
-        this.createdDate = LocalDate.now();
+        this.createdDate = LocalDateTime.now();
     }
 
     // Constructor 3: 4 tham số (Dùng trong InvoiceService)
-    public Invoice(String patientName, Double amount, String paymentStatus, LocalDate createdDate) {
+    public Invoice(String patientName, Double amount, String paymentStatus, LocalDateTime createdDate) {
         this.patientName = patientName;
         this.amount = amount != null ? amount : 0.0;
         this.paymentStatus = paymentStatus != null ? paymentStatus : "UNPAID";
-        this.createdDate = createdDate != null ? createdDate : LocalDate.now();
+        this.createdDate = createdDate != null ? createdDate : LocalDateTime.now();
     }
 
     // Getters and Setters an toàn
@@ -65,8 +67,8 @@ public class Invoice {
     public String getPaymentStatus() { return paymentStatus != null ? paymentStatus : "UNPAID"; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 
-    public LocalDate getCreatedDate() { return createdDate != null ? createdDate : LocalDate.now(); }
-    public void setCreatedDate(LocalDate createdDate) { this.createdDate = createdDate; }
+    public LocalDateTime getCreatedDate() { return createdDate != null ? createdDate : LocalDateTime.now(); }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
 
     public String getItemsSummary() { return itemsSummary != null ? itemsSummary : ""; }
     public void setItemsSummary(String itemsSummary) { this.itemsSummary = itemsSummary; }

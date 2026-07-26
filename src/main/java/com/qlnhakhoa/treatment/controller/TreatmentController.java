@@ -135,7 +135,7 @@ public class TreatmentController {
                     if (treatment.getServiceOrderItems() != null && !treatment.getServiceOrderItems().isEmpty()) {
                         for (ServiceOrderItem item : treatment.getServiceOrderItems()) {
                             if (itemsBuilder.length() > 0) itemsBuilder.append(" | ");
-                            itemsBuilder.append("🛠️ ").append(item.getServiceName());
+                            itemsBuilder.append(item.getServiceName());
                             if (item.getQuantity() != null && item.getQuantity() > 1) {
                                 itemsBuilder.append(" (x").append(item.getQuantity()).append(")");
                             }
@@ -146,7 +146,7 @@ public class TreatmentController {
                     if (treatment.getPrescriptionItems() != null && !treatment.getPrescriptionItems().isEmpty()) {
                         for (PrescriptionItem item : treatment.getPrescriptionItems()) {
                             if (itemsBuilder.length() > 0) itemsBuilder.append(" | ");
-                            itemsBuilder.append("💊 ").append(item.getMedicineName());
+                            itemsBuilder.append(item.getMedicineName());
                             if (item.getQuantity() != null) {
                                 itemsBuilder.append(" (SL: ").append(item.getQuantity()).append(")");
                             }
@@ -174,13 +174,17 @@ public class TreatmentController {
                 if (targetInvoice == null) {
                     targetInvoice = new Invoice(patientId, patientName, totalAmount);
                 } else {
-                    // Nếu đã có sẵn hóa đơn từ Service, chỉ cần cập nhật lại thông tin chuẩn
+                    // Nếu đã có sẵn hóa đơn, cập nhật lại thông tin chuẩn
                     targetInvoice.setPatientId(patientId);
                     targetInvoice.setPatientName(patientName);
                     targetInvoice.setAmount(totalAmount);
                 }
 
                 targetInvoice.setItemsSummary(summaryText);
+                
+                // ÉP TRẠNG THÁI VỀ CHƯA THANH TOÁN ĐỂ HIỆN MÃ QR
+                targetInvoice.setPaymentStatus("UNPAID");
+
                 targetInvoice = invoiceRepository.save(targetInvoice);
             }
         } catch (Exception e) {

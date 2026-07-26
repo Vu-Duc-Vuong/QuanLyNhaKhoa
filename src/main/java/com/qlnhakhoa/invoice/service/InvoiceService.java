@@ -5,7 +5,7 @@ import com.qlnhakhoa.invoice.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,7 +19,7 @@ public class InvoiceService {
     }
 
     public Invoice createInvoice(String patientName, Double amount) {
-        Invoice invoice = new Invoice(patientName, amount, "PAID", LocalDate.now());
+        Invoice invoice = new Invoice(patientName, amount, "PAID", LocalDateTime.now());
         return invoiceRepository.save(invoice);
     }
 }

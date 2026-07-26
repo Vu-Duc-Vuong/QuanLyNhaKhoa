@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,38 @@ public class InvoiceController {
             }
         } catch (Exception e) {
             System.err.println("Lỗi cập nhật thanh toán: " + e.getMessage());
+        }
+        return "redirect:/invoice";
+    }
+
+    // --- HÀM XÓA HÓA ĐƠN ---
+    @GetMapping("/invoice/delete/{id}")
+    public String deleteInvoice(@PathVariable("id") Long id) {
+        try {
+            if (invoiceRepository != null) {
+                invoiceRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi xóa hóa đơn id " + id + ": " + e.getMessage());
+        }
+        return "redirect:/invoice";
+    }
+
+    // --- HÀM TẠO HÓA ĐƠN MỚI (ĐÃ SỬA SANG LOCALDATETIME) ---
+    @PostMapping("/invoice/add")
+    public String addInvoice(@ModelAttribute Invoice invoice) {
+        try {
+            if (invoiceRepository != null && invoice != null) {
+                if (invoice.getPaymentStatus() == null) {
+                    invoice.setPaymentStatus("UNPAID");
+                }
+                if (invoice.getCreatedDate() == null) {
+                    invoice.setCreatedDate(LocalDateTime.now());
+                }
+                invoiceRepository.save(invoice);
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi thêm hóa đơn mới: " + e.getMessage());
         }
         return "redirect:/invoice";
     }
