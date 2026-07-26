@@ -6,6 +6,9 @@ import com.qlnhakhoa.auth.entity.Role;
 import com.qlnhakhoa.auth.entity.User;
 import com.qlnhakhoa.auth.repository.UserRepository;
 
+import com.qlnhakhoa.clinic.entity.Clinic;
+import com.qlnhakhoa.clinic.repository.ClinicRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,13 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Autowired
+    private ClinicRepository clinicRepository;
+
+
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
 
 
 
@@ -32,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     public void register(RegisterRequest request) {
 
 
-        // Kiểm tra trùng username
+        // Kiểm tra username
         if(userRepository.existsByUsername(request.getUsername())){
 
             throw new RuntimeException(
@@ -42,7 +51,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
 
-        // Kiểm tra trùng email
+
+        // Kiểm tra email
         if(userRepository.existsByEmail(request.getEmail())){
 
             throw new RuntimeException(
@@ -52,7 +62,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
 
-        // Kiểm tra trùng số điện thoại
+
+        // Kiểm tra số điện thoại
         if(userRepository.existsByPhone(request.getPhone())){
 
             throw new RuntimeException(
@@ -63,6 +74,38 @@ public class AuthServiceImpl implements AuthService {
 
 
 
+        /*
+         * Tạo Nha khoa mới cho Admin
+         */
+
+        Clinic clinic = new Clinic();
+
+
+        clinic.setClinicCode(
+                "NK" + System.currentTimeMillis()
+        );
+
+
+        clinic.setClinicName(
+                "Nha khoa của " + request.getFullName()
+        );
+
+
+        clinic.setStatus(
+                "ACTIVE"
+        );
+
+
+        clinicRepository.save(clinic);
+
+
+
+
+
+        /*
+         * Tạo tài khoản Admin
+         */
+
         User user = new User();
 
 
@@ -72,14 +115,17 @@ public class AuthServiceImpl implements AuthService {
         );
 
 
+
         user.setUsername(
                 request.getUsername()
         );
 
 
+
         user.setEmail(
                 request.getEmail()
         );
+
 
 
         user.setPhone(
@@ -96,18 +142,29 @@ public class AuthServiceImpl implements AuthService {
 
 
 
-       // Người đăng ký mặc định là ADMIN
-        user.setRole(Role.ADMIN);
+        // Chỉ còn ADMIN
+        user.setRole(
+                Role.ADMIN
+        );
 
 
 
-        // Trạng thái tài khoản
-        user.setStatus("ACTIVE");
+        user.setStatus(
+                "ACTIVE"
+        );
 
 
 
-        // Cho phép đăng nhập
-        user.setEnabled(true);
+        user.setEnabled(
+                true
+        );
+
+
+
+        // Gán User vào Nha khoa
+        user.setClinic(
+                clinic
+        );
 
 
 
