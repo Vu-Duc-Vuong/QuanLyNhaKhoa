@@ -6,17 +6,13 @@ import com.qlnhakhoa.appointment.entity.Appointment;
 import com.qlnhakhoa.appointment.repository.AppointmentRepository;
 import com.qlnhakhoa.invoice.repository.InvoiceRepository;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 
 @Controller
@@ -27,15 +23,12 @@ public class DashboardController {
     private PatientRepository patientRepository;
 
 
-
     @Autowired
     private AppointmentRepository appointmentRepository;
 
 
-
     @Autowired
     private InvoiceRepository invoiceRepository;
-
 
 
 
@@ -61,42 +54,37 @@ public class DashboardController {
 
 
 
-
         // Tổng bệnh nhân
+
         long totalPatients =
                 patientRepository.count();
 
 
 
+        // Lịch trong ngày
 
-
-        // Lịch hẹn theo ngày đang xem
-        List<Appointment> appointmentList =
+        List<Appointment> appointments =
                 appointmentRepository
-                        .findByAppointmentDateOrderByAppointmentTimeAsc(
-                                selectedDate
-                        );
-
-
+                .findByAppointmentDateOrderByAppointmentTimeAsc(
+                        selectedDate
+                );
 
 
 
         // Danh sách chờ khám
+
         List<Appointment> waitingList =
                 appointmentRepository
-                        .findByAppointmentDateAndStatusContainingIgnoreCaseOrderByAppointmentTimeAsc(
-                                selectedDate,
-                                "Chờ khám"
-                        );
+                .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
+                        selectedDate,
+                        "Chờ khám"
+                );
 
 
 
 
-
-        // Doanh thu
         Double revenue =
                 invoiceRepository.sumTotalAmount();
-
 
 
         if(revenue == null){
@@ -107,20 +95,16 @@ public class DashboardController {
 
 
 
-
-
         model.addAttribute(
                 "totalPatients",
                 totalPatients
         );
 
 
-
         model.addAttribute(
                 "todayAppointments",
-                appointmentList.size()
+                appointments.size()
         );
-
 
 
         model.addAttribute(
@@ -129,13 +113,11 @@ public class DashboardController {
         );
 
 
-
-        // Quan trọng: HTML đang dùng appointments
+        // QUAN TRỌNG
         model.addAttribute(
                 "appointments",
-                appointmentList
+                appointments
         );
-
 
 
         model.addAttribute(
@@ -149,7 +131,6 @@ public class DashboardController {
                 "selectedDate",
                 selectedDate
         );
-
 
 
         model.addAttribute(

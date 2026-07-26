@@ -1,4 +1,4 @@
-﻿package com.qlnhakhoa.treatment.entity;
+package com.qlnhakhoa.treatment.entity;
 
 
 import jakarta.persistence.*;

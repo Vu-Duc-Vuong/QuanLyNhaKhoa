@@ -29,10 +29,12 @@ public class AppointmentController {
     @GetMapping("/appointment")
     public String appointmentList(Model model) {
 
+
         model.addAttribute(
                 "appointments",
                 appointmentService.getAllAppointments()
         );
+
 
         return "appointment/list";
     }
@@ -41,9 +43,11 @@ public class AppointmentController {
 
 
 
+
     // Form thêm
     @GetMapping("/appointment/add")
     public String addAppointmentPage(Model model) {
+
 
         model.addAttribute(
                 "appointment",
@@ -65,6 +69,7 @@ public class AppointmentController {
 
 
 
+
     // Lưu lịch hẹn
     @PostMapping("/appointment/save")
     public String saveAppointment(
@@ -74,11 +79,9 @@ public class AppointmentController {
 
 
 
-        /*
-         * Chuẩn hóa mã lịch
-         * 5 -> LH-005
-         */
+        // Chuẩn hóa mã: 5 -> LH-005
         try {
+
 
             String code =
                     appointment.getAppointmentCode()
@@ -86,8 +89,10 @@ public class AppointmentController {
                             .trim();
 
 
+
             int number =
                     Integer.parseInt(code);
+
 
 
             appointment.setAppointmentCode(
@@ -96,6 +101,7 @@ public class AppointmentController {
                             number
                     )
             );
+
 
 
         } catch(Exception e) {
@@ -127,49 +133,7 @@ public class AppointmentController {
 
 
 
-        /*
-         * Kiểm tra trùng mã lịch
-         */
-
-        if(
-            appointmentService
-                    .existsByAppointmentCode(
-                            appointment.getAppointmentCode()
-                    )
-        ) {
-
-
-            model.addAttribute(
-                    "appointment",
-                    appointment
-            );
-
-
-            model.addAttribute(
-                    "patients",
-                    patientService.getAllPatients()
-            );
-
-
-            model.addAttribute(
-                    "error",
-                    "Mã lịch hẹn đã tồn tại!"
-            );
-
-
-            return "appointment/add";
-        }
-
-
-
-
-
-
-
-
-        /*
-         * Kiểm tra trùng ngày giờ
-         */
+        // Kiểm tra trùng ngày giờ
 
         if(
             appointmentService.checkDuplicate(
@@ -223,7 +187,9 @@ public class AppointmentController {
             );
 
 
+
         } catch(RuntimeException e) {
+
 
 
             model.addAttribute(
@@ -245,6 +211,7 @@ public class AppointmentController {
 
 
             return "appointment/add";
+
         }
 
 
@@ -262,7 +229,7 @@ public class AppointmentController {
 
 
 
-    // sửa lịch
+    // Sửa lịch
 
     @GetMapping("/appointment/edit/{id}")
     public String editAppointment(
@@ -283,6 +250,7 @@ public class AppointmentController {
 
 
         return "appointment/edit";
+
     }
 
 
@@ -291,12 +259,42 @@ public class AppointmentController {
 
 
 
-    // đổi trạng thái
+
+
+    // Bắt đầu khám
+    // Chờ khám -> Đang khám
+
+    @GetMapping("/appointment/start/{id}")
+    public String startAppointment(
+            @PathVariable Long id
+    ) {
+
+
+        appointmentService.updateStatus(
+                id,
+                "Đang khám"
+        );
+
+
+        return "redirect:/home";
+
+    }
+
+
+
+
+
+
+
+
+
+    // Đổi trạng thái thủ công
 
     @GetMapping("/appointment/status/{id}/{status}")
     public String updateStatus(
             @PathVariable Long id,
-            @PathVariable String status) {
+            @PathVariable String status
+    ) {
 
 
         appointmentService.updateStatus(
@@ -306,6 +304,7 @@ public class AppointmentController {
 
 
         return "redirect:/appointment";
+
     }
 
 
@@ -315,18 +314,22 @@ public class AppointmentController {
 
 
 
-    // xóa
+
+
+    // Xóa
 
     @GetMapping("/appointment/delete/{id}")
     public String deleteAppointment(
             @PathVariable Long id,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes
+    ) {
 
 
         try {
 
 
             appointmentService.deleteAppointment(id);
+
 
 
             redirectAttributes.addFlashAttribute(
@@ -346,6 +349,7 @@ public class AppointmentController {
         }
 
 
+
         return "redirect:/appointment";
 
     }
@@ -356,12 +360,16 @@ public class AppointmentController {
 
 
 
-    // tìm kiếm
+
+
+    // Tìm kiếm
 
     @GetMapping("/appointment/search")
     public String searchAppointment(
             @RequestParam("keyword") String keyword,
-            Model model) {
+            Model model
+    ) {
+
 
 
         model.addAttribute(
@@ -371,6 +379,7 @@ public class AppointmentController {
 
 
         return "appointment/list";
+
     }
 
 }
