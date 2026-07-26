@@ -96,8 +96,8 @@ public class AuthServiceImpl implements AuthService {
 
 
 
-        // Người đăng ký mặc định là bệnh nhân
-        user.setRole(Role.PATIENT);
+       // Người đăng ký mặc định là ADMIN
+        user.setRole(Role.ADMIN);
 
 
 

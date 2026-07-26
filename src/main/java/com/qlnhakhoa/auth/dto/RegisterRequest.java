@@ -12,6 +12,13 @@ public class RegisterRequest {
 
     private String password;
 
+    // Thông tin Nha khoa
+    private String clinicName;
+
+    private String clinicAddress;
+
+    private String clinicPhone;
+
     public RegisterRequest() {
     }
 
@@ -55,4 +62,27 @@ public class RegisterRequest {
         this.password = password;
     }
 
+    public String getClinicName() {
+        return clinicName;
+    }
+
+    public void setClinicName(String clinicName) {
+        this.clinicName = clinicName;
+    }
+
+    public String getClinicAddress() {
+        return clinicAddress;
+    }
+
+    public void setClinicAddress(String clinicAddress) {
+        this.clinicAddress = clinicAddress;
+    }
+
+    public String getClinicPhone() {
+        return clinicPhone;
+    }
+
+    public void setClinicPhone(String clinicPhone) {
+        this.clinicPhone = clinicPhone;
+    }
 }

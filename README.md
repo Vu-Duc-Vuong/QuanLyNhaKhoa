@@ -2,7 +2,8 @@
 chạy test mvn test
 
 
-chay project mvn spring-boot:run
+chay project .\mvnw.cmd spring-boot:run 
+(Tải các thư viện còn thiếu,maven, ...)
 
 Admin gốc tự khởi tạo
 

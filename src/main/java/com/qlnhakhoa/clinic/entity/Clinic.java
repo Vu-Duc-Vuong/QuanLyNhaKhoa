@@ -10,54 +10,101 @@ public class Clinic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    // Mã định danh của nha khoa
     @Column(unique = true, nullable = false)
-    private String clinicCode;   // Mã phòng (VD: PK01)
+    private String clinicCode;
 
+
+    // Tên nha khoa
     @Column(nullable = false)
-    private String clinicName;   // Tên phòng khám (VD: Phòng Khám Tổng Quát 1)
+    private String clinicName;
 
-    private String location;     // Vị trí / Tầng (VD: Tầng 2 - Phòng 201)
 
-    private String status;       // Trạng thái (Hoạt động, Đang bảo trì, Tạm đóng)
+    // Địa chỉ nha khoa
+    private String address;
+
+
+    // Số điện thoại liên hệ
+    private String phone;
+
+
+    // Email nha khoa
+    private String email;
+
+
+    // ACTIVE / INACTIVE
+    private String status;
+
 
     public Clinic() {
     }
+
 
     public Long getId() {
         return id;
     }
 
+
     public void setId(Long id) {
         this.id = id;
     }
+
 
     public String getClinicCode() {
         return clinicCode;
     }
 
+
     public void setClinicCode(String clinicCode) {
         this.clinicCode = clinicCode;
     }
+
 
     public String getClinicName() {
         return clinicName;
     }
 
+
     public void setClinicName(String clinicName) {
         this.clinicName = clinicName;
     }
 
-    public String getLocation() {
-        return location;
+
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+
+    public void setAddress(String address) {
+        this.address = address;
     }
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 
     public String getStatus() {
         return status;
     }
+
 
     public void setStatus(String status) {
         this.status = status;
