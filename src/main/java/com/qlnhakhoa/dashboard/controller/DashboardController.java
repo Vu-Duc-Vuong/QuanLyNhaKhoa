@@ -3,6 +3,7 @@ package com.qlnhakhoa.dashboard.controller;
 
 import com.qlnhakhoa.patient.repository.PatientRepository;
 import com.qlnhakhoa.appointment.repository.AppointmentRepository;
+import com.qlnhakhoa.appointment.entity.Appointment;
 import com.qlnhakhoa.invoice.repository.InvoiceRepository;
 
 
@@ -10,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 
@@ -38,9 +41,28 @@ public class DashboardController {
 
 
 
-
     @GetMapping("/home")
-    public String dashboard(Model model){
+    public String dashboard(
+            @RequestParam(required = false) String date,
+            Model model
+    ){
+
+
+        // Ngày đang xem
+        LocalDate selectedDate;
+
+
+        if(date != null && !date.isEmpty()){
+
+            selectedDate = LocalDate.parse(date);
+
+        }else{
+
+            selectedDate = LocalDate.now();
+
+        }
+
+
 
 
 
@@ -52,23 +74,28 @@ public class DashboardController {
 
 
 
-       long todayAppointments =
-        appointmentRepository
-                .findByAppointmentDateOrderByAppointmentTimeAsc(
-                        LocalDate.now()
-                )
-                .size();
+
+        // Danh sách lịch theo ngày
+        List<Appointment> appointments =
+                appointmentRepository
+                        .findByAppointmentDateOrderByAppointmentTimeAsc(
+                                selectedDate
+                        );
 
 
 
 
-long waitingAppointments =
-        appointmentRepository
-                .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
-                        LocalDate.now(),
-                        "Chờ khám"
-                )
-                .size();
+
+
+        // Danh sách bệnh nhân đang chờ khám trong ngày
+        List<Appointment> waitingList =
+                appointmentRepository
+                        .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
+                                selectedDate,
+                                "Chờ khám"
+                        );
+
+
 
 
 
@@ -76,8 +103,7 @@ long waitingAppointments =
 
         // Tổng doanh thu
         Double revenue =
-                invoiceRepository
-                        .sumTotalAmount();
+                invoiceRepository.sumTotalAmount();
 
 
 
@@ -86,6 +112,7 @@ long waitingAppointments =
             revenue = 0.0;
 
         }
+
 
 
 
@@ -102,14 +129,35 @@ long waitingAppointments =
 
         model.addAttribute(
                 "todayAppointments",
-                todayAppointments
+                appointments.size()
         );
 
 
 
         model.addAttribute(
                 "waitingAppointments",
-                waitingAppointments
+                waitingList.size()
+        );
+
+
+
+        model.addAttribute(
+                "appointments",
+                appointments
+        );
+
+
+
+        model.addAttribute(
+                "waitingList",
+                waitingList
+        );
+
+
+
+        model.addAttribute(
+                "selectedDate",
+                selectedDate
         );
 
 
@@ -123,7 +171,7 @@ long waitingAppointments =
 
 
 
-       return "layout/dashboard";
+        return "layout/dashboard";
 
     }
 
