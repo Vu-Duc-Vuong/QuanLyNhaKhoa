@@ -9,6 +9,8 @@
         body { background-color: #f8f9fa; }
         .table-dark-custom th { background-color: #212529 !important; color: #ffffff !important; }
         .card-stat { border-radius: 6px; }
+        .text-nowrap-custom { white-space: nowrap !important; }
+        .table td, .table th { vertical-align: middle; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -38,7 +40,8 @@
         </div>
     </nav>
 
-    <div class="container py-2 flex-grow-1">
+    <!-- ĐÃ SỬA: Đổi sang container-fluid px-4 để dãn rộng tràn màn hình -->
+    <div class="container-fluid px-4 py-2 flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-dark m-0">Báo cáo doanh thu</h2>
             
@@ -105,24 +108,25 @@
         <!-- BẢNG THEO PHONG CÁCH NỀN ĐEN CỦA NHÓM -->
         <div class="bg-white shadow-sm border">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <!-- ĐÃ SỬA: Thêm class w-100 -->
+                <table class="table table-hover align-middle mb-0 w-100">
                     <thead class="table-dark-custom">
                         <tr>
-                            <th class="py-3 px-3">Mã HĐ</th>
-                            <th class="py-3 px-3 text-center">Ngày & Giờ Lập</th>
-                            <th class="py-3 px-3">Mã BN</th>
-                            <th class="py-3 px-3">Tên Bệnh Nhân</th>
+                            <th class="py-3 px-3 text-nowrap-custom" style="width: 100px;">Mã HĐ</th>
+                            <th class="py-3 px-3 text-center text-nowrap-custom" style="width: 180px;">Ngày & Giờ Lập</th>
+                            <th class="py-3 px-3 text-nowrap-custom" style="width: 90px;">Mã BN</th>
+                            <th class="py-3 px-3 text-nowrap-custom" style="width: 180px;">Tên Bệnh Nhân</th>
                             <th class="py-3 px-3">Nội Dung / Dịch Vụ</th>
-                            <th class="py-3 px-3 text-end">Số Tiền</th>
-                            <th class="py-3 px-3 text-center">Trạng Thái</th>
+                            <th class="py-3 px-3 text-end text-nowrap-custom" style="width: 130px;">Số Tiền</th>
+                            <th class="py-3 px-3 text-center text-nowrap-custom" style="width: 140px;">Trạng Thái</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="inv : ${invoiceList}">
-                            <td class="px-3 fw-bold" th:text="${'INV-' + (inv.id != null ? inv.id : 0)}">INV-1</td>
-                            <td class="px-3 text-center" th:text="${inv.createdDate != null ? #temporals.format(inv.createdDate, 'dd/MM/yyyy hh:mm a') : 'N/A'}">26/07/2026 02:30 PM</td>
-                            <td class="px-3" th:text="${'BN-' + (inv.patientId != null ? inv.patientId : 0)}">BN-101</td>
-                            <td class="px-3 fw-semibold" th:text="${inv.patientName != null ? inv.patientName : 'Khách lẻ'}">Nguyễn Văn A</td>
+                            <td class="px-3 fw-bold text-nowrap-custom" th:text="${'INV-' + (inv.id != null ? inv.id : 0)}">INV-1</td>
+                            <td class="px-3 text-center text-nowrap-custom" th:text="${inv.createdDate != null ? #temporals.format(inv.createdDate, 'dd/MM/yyyy hh:mm a') : 'N/A'}">26/07/2026 02:30 PM</td>
+                            <td class="px-3 text-nowrap-custom" th:text="${'BN-' + (inv.patientId != null ? inv.patientId : 0)}">BN-101</td>
+                            <td class="px-3 fw-semibold text-nowrap-custom" th:text="${inv.patientName != null ? inv.patientName : 'Khách lẻ'}">Nguyễn Văn A</td>
                             <td class="px-3">
                                 <!-- Đã thêm regex replaceAll xóa sạch mọi Emoji icon dư thừa -->
                                 <small class="text-muted" 
@@ -130,8 +134,8 @@
                                         Khám răng
                                 </small>
                             </td>
-                            <td class="px-3 text-end fw-bold text-success" th:text="${#numbers.formatDecimal(inv.amount != null ? inv.amount : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
-                            <td class="px-3 text-center">
+                            <td class="px-3 text-end fw-bold text-success text-nowrap-custom" th:text="${#numbers.formatDecimal(inv.amount != null ? inv.amount : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                            <td class="px-3 text-center text-nowrap-custom">
                                 <span th:if="${inv.paymentStatus == 'PAID'}" class="badge bg-success">Đã thanh toán</span>
                                 <span th:if="${inv.paymentStatus != 'PAID'}" class="badge bg-warning text-dark">Chưa thanh toán</span>
                             </td>
