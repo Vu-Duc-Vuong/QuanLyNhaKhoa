@@ -16,11 +16,9 @@
 
     <div th:replace="~{layout/sidebar}"></div>
 
-    <!-- ĐÃ SỬA: Dùng container-fluid px-4 để tràn viền full màn hình -->
     <div class="container-fluid px-4 mt-4 flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="text-primary fw-bold m-0">DANH SÁCH HÓA ĐƠN THANH TOÁN</h2>
-            <!-- NÚT MỞ MODAL THÊM HÓA ĐƠN -->
             <button type="button" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#addInvoiceModal">
                 + Thêm Hóa Đơn Mới
             </button>
@@ -49,9 +47,8 @@
                                 <td class="text-center text-nowrap-custom" th:text="${'BN-' + inv.patientId}">BN-1</td>
                                 <td class="fw-bold text-nowrap-custom" th:text="${inv.patientName}">Nguyễn Văn A</td>
                                 <td>
-                                    <!-- Đã xóa icon 🛠️ -->
-                                    <span class="badge bg-light text-dark border p-2" 
-                                          th:text="${inv.itemsSummary != null ? inv.itemsSummary : 'Khám tổng quát'}">
+                                    <span class="badge bg-light text-dark border p-2 text-start d-inline-block" 
+                                          th:utext="${inv.itemsSummary != null ? #strings.replace(inv.itemsSummary, ' | ', '<br/>') : 'Khám tổng quát'}">
                                         Nhổ răng
                                     </span>
                                 </td>
@@ -62,11 +59,9 @@
                                     <span th:if="${inv.paymentStatus != 'PAID'}" class="badge bg-warning text-dark">Chưa Thanh Toán</span>
                                 </td>
                                 <td class="text-center text-nowrap-custom">
-                                    <!-- Đã xóa icon 👁️ -->
                                     <a th:href="@{/invoice/checkout/{id}(id=${inv.id})}" class="btn btn-sm btn-primary fw-bold me-1">
                                         Xem / Thanh Toán
                                     </a>
-                                    <!-- NÚT XÓA HÓA ĐƠN GHI NHẦM -->
                                     <a th:href="@{/invoice/delete/{id}(id=${inv.id})}" 
                                        onclick="return confirm('Xác nhận xóa hóa đơn này do ghi nhầm?');" 
                                        class="btn btn-sm btn-outline-danger fw-bold">
@@ -87,7 +82,6 @@
         </div>
     </div>
 
-    <!-- MODAL THÊM HÓA ĐƠN MỚI -->
     <div class="modal fade" id="addInvoiceModal" tabindex="-1" aria-labelledby="addInvoiceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

@@ -15,7 +15,6 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- NAVBAR CHUẨN THEO TEAM (NỀN ĐEN - ĐẦY ĐỦ MENU) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container-fluid px-4">
             <a class="navbar-brand fw-bold me-4" href="/">Quản lý Nha khoa</a>
@@ -40,12 +39,10 @@
         </div>
     </nav>
 
-    <!-- ĐÃ SỬA: Đổi sang container-fluid px-4 để dãn rộng tràn màn hình -->
     <div class="container-fluid px-4 py-2 flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold text-dark m-0">Báo cáo doanh thu</h2>
             
-            <!-- THÊM BỘ LỌC CHỌN THÁNG/NĂM -->
             <form method="get" action="/report" class="d-flex align-items-center gap-2">
                 <label class="fw-bold me-1">Chọn Tháng:</label>
                 <select name="month" class="form-select form-select-sm" style="width: 110px;">
@@ -65,7 +62,6 @@
             </form>
         </div>
 
-        <!-- THỐNG KÊ DOANH THU -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card card-stat bg-primary text-white border-0 shadow-sm">
@@ -77,7 +73,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card card-stat bg-success text-white border-0 shadow-sm">
+                <div class="card card-stat bg-primary text-white border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Doanh Thu Hôm Nay</div>
                         <h3 class="fw-bold mb-0" th:text="${#numbers.formatDecimal(todayRevenue != null ? todayRevenue : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</h3>
@@ -86,7 +82,7 @@
             </div>
 
             <div class="col-md-3">
-                <div class="card card-stat bg-info text-white border-0 shadow-sm">
+                <div class="card card-stat bg-primary text-white border-0 shadow-sm">
                     <div class="card-body">
                         <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Tổng Hóa Đơn</div>
                         <h3 class="fw-bold mb-0" th:text="${totalInvoices != null ? totalInvoices : 0}">0</h3>
@@ -94,21 +90,18 @@
                 </div>
             </div>
 
-            <!-- ĐỔI TỪ HÓA ĐƠN ĐÃ THU -> HÓA ĐƠN HÔM NAY -->
             <div class="col-md-3">
-                <div class="card card-stat bg-warning text-dark border-0 shadow-sm">
+                <div class="card card-stat bg-primary text-white border-0 shadow-sm">
                     <div class="card-body">
-                        <div class="text-dark-50 small font-weight-bold text-uppercase mb-1">Hóa Đơn Hôm Nay</div>
+                        <div class="text-white-50 small font-weight-bold text-uppercase mb-1">Hóa Đơn Hôm Nay</div>
                         <h3 class="fw-bold mb-0" th:text="${todayInvoicesCount != null ? todayInvoicesCount : 0}">0</h3>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- BẢNG THEO PHONG CÁCH NỀN ĐEN CỦA NHÓM -->
         <div class="bg-white shadow-sm border">
             <div class="table-responsive">
-                <!-- ĐÃ SỬA: Thêm class w-100 -->
                 <table class="table table-hover align-middle mb-0 w-100">
                     <thead class="table-dark-custom">
                         <tr>
@@ -128,9 +121,8 @@
                             <td class="px-3 text-nowrap-custom" th:text="${'BN-' + (inv.patientId != null ? inv.patientId : 0)}">BN-101</td>
                             <td class="px-3 fw-semibold text-nowrap-custom" th:text="${inv.patientName != null ? inv.patientName : 'Khách lẻ'}">Nguyễn Văn A</td>
                             <td class="px-3">
-                                <!-- Đã thêm regex replaceAll xóa sạch mọi Emoji icon dư thừa -->
-                                <small class="text-muted" 
-                                       th:text="${inv.itemsSummary != null && !inv.itemsSummary.empty ? inv.itemsSummary.replaceAll('[\uD800-\uDBFF\uDC00-\uDFFF\u2600-\u26FF\u2700-\u27BF]', '') : 'Dịch vụ nha khoa'}">
+                                <small class="text-muted d-inline-block" 
+                                       th:utext="${inv.itemsSummary != null && !inv.itemsSummary.empty ? #strings.replace(inv.itemsSummary, ' | ', '<br/>') : 'Dịch vụ nha khoa'}">
                                         Khám răng
                                 </small>
                             </td>
@@ -150,7 +142,6 @@
         </div>
     </div>
 
-    <!-- THÊM DÒNG FOOTER THEO YÊU CẦU ZALO -->
     <footer class="mt-auto py-3 text-center text-muted border-top bg-white">
         <p class="mb-0 fw-bold">© N02 Quản lý Nha Khoa</p>
     </footer>
