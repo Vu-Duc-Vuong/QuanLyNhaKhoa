@@ -5,6 +5,7 @@ import com.qlnhakhoa.invoice.repository.InvoiceRepository;
 import com.qlnhakhoa.treatment.entity.PrescriptionItem;
 import com.qlnhakhoa.treatment.entity.ServiceOrderItem;
 import com.qlnhakhoa.treatment.entity.Treatment;
+import com.qlnhakhoa.medicine.service.MedicineService;
 import com.qlnhakhoa.treatment.service.TreatmentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TreatmentController {
 
     @Autowired
     private TreatmentService treatmentService;
+
+    @Autowired
+    private MedicineService medicineService;
 
     @Autowired(required = false)
     private InvoiceRepository invoiceRepository;
@@ -50,6 +54,7 @@ public class TreatmentController {
         model.addAttribute("treatment", treatment);
         model.addAttribute("prescriptionItem", new PrescriptionItem());
         model.addAttribute("serviceOrderItem", new ServiceOrderItem());
+        model.addAttribute("medicines", medicineService.getAllMedicines());
 
         return "treatment/exam";
     }

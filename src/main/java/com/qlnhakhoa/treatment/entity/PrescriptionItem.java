@@ -1,8 +1,8 @@
-package com.qlnhakhoa.treatment.entity;
+﻿package com.qlnhakhoa.treatment.entity;
 
 
 import jakarta.persistence.*;
-
+import jakarta.persistence.Transient;
 
 // Một dòng thuốc trong đơn kê thuốc của hồ sơ khám
 // Lưu ý: hiện tại nhập tên thuốc trực tiếp (chưa liên kết bảng danh mục thuốc
@@ -22,6 +22,10 @@ public class PrescriptionItem {
     @ManyToOne
     @JoinColumn(name = "treatment_id")
     private Treatment treatment;
+
+    // Liên kết tới danh mục thuốc
+    @Transient
+    private Long medicineId;
 
 
 
@@ -44,7 +48,8 @@ public class PrescriptionItem {
     // Đơn vị: viên, vỉ, chai, tuýp...
     private String unit;
 
-
+    // Giá tiền liên kết từ danh mục thuốc
+    private Double price;
 
     // Ghi chú thêm
     private String note;
@@ -70,6 +75,14 @@ public class PrescriptionItem {
 
     public void setTreatment(Treatment treatment) {
         this.treatment = treatment;
+    }
+
+    public Long getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(Long medicineId) {
+        this.medicineId = medicineId;
     }
 
     public String getMedicineName() {
@@ -104,6 +117,14 @@ public class PrescriptionItem {
         this.unit = unit;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public String getNote() {
         return note;
     }
@@ -112,4 +133,13 @@ public class PrescriptionItem {
         this.note = note;
     }
 
+    public Double getLineTotal() {
+        if (price == null || quantity == null) {
+            return 0.0;
+        }
+        return price * quantity;
+    }
+
 }
+
+

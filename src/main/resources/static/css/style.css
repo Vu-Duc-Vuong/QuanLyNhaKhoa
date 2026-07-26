@@ -1,5 +1,63 @@
-body{
-    background:#f5f5f5;
-}body{
-    background-color:#f8f9fa;
+body {
+    background-color: #f3f6fb;
+    min-height: 100vh;
 }
+
+.exam-card .card-header,
+.service-card .card-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+    color: #fff;
+    border-bottom: none;
+}
+
+.exam-card,
+.service-card {
+    border-radius: 1rem;
+}
+
+.table thead th {
+    background: #f8f9ff;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-hover tbody tr:hover {
+    background: #eef4ff;
+}
+
+.form-control[readonly] {
+    background-color: #f8f9ff;
+}
+
+.input-form-section {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.input-form-section h5 {
+    margin-bottom: 1rem;
+}
+
+.btn-add {
+    min-height: 3.4rem;
+}
+
+.table-responsive {
+    border-radius: 1rem;
+}
+
+.content-card {
+    background: #ffffff;
+    border-radius: 1rem;
+}
+
+.table-custom thead th {
+    background: #212529;
+    color: #ffffff;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #eef4ff;
+}
+

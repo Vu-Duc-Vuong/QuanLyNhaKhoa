@@ -4,6 +4,8 @@ package com.qlnhakhoa.treatment.service;
 import com.qlnhakhoa.appointment.entity.Appointment;
 import com.qlnhakhoa.appointment.repository.AppointmentRepository;
 import com.qlnhakhoa.invoice.service.InvoiceService;
+import com.qlnhakhoa.medicine.entity.Medicine;
+import com.qlnhakhoa.medicine.service.MedicineService;
 import com.qlnhakhoa.treatment.entity.PrescriptionItem;
 import com.qlnhakhoa.treatment.entity.ServiceOrderItem;
 import com.qlnhakhoa.treatment.entity.Treatment;
@@ -13,6 +15,7 @@ import com.qlnhakhoa.treatment.repository.TreatmentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +48,8 @@ public class TreatmentService {
     @Autowired
     private InvoiceService invoiceService;
 
+    @Autowired
+    private MedicineService medicineService;
 
 
     // ================== DANH SÁCH BỆNH NHÂN CHỜ ==================
@@ -142,6 +147,7 @@ public class TreatmentService {
 
     // ================== KÊ THUỐC ==================
 
+    @Transactional
     public void addPrescriptionItem(Long treatmentId, PrescriptionItem item) {
 
         Treatment treatment = getTreatmentById(treatmentId);
@@ -150,10 +156,27 @@ public class TreatmentService {
             return;
         }
 
+        if (item.getQuantity() == null || item.getQuantity() <= 0) {
+            item.setQuantity(1);
+        }
+        if (item.getPrice() == null) {
+            item.setPrice(0.0);
+        }
+
+        if (item.getMedicineId() != null) {
+            Medicine medicine = medicineService.getMedicineById(item.getMedicineId());
+            if (medicine != null) {
+                item.setMedicineName(medicine.getMedicineName());
+                item.setPrice(medicine.getPrice());
+                if (item.getUnit() == null || item.getUnit().isBlank()) {
+                    item.setUnit(medicine.getUnit());
+                }
+            }
+        }
+
         item.setTreatment(treatment);
-
+        prescriptionItemRepository.save(item);
         treatment.getPrescriptionItems().add(item);
-
         treatmentRepository.save(treatment);
 
     }
@@ -170,6 +193,7 @@ public class TreatmentService {
 
     // ================== CHỈ ĐỊNH DỊCH VỤ ==================
 
+    @Transactional
     public void addServiceOrderItem(Long treatmentId, ServiceOrderItem item) {
 
         Treatment treatment = getTreatmentById(treatmentId);
@@ -178,10 +202,16 @@ public class TreatmentService {
             return;
         }
 
+        if (item.getQuantity() == null || item.getQuantity() <= 0) {
+            item.setQuantity(1);
+        }
+        if (item.getPrice() == null) {
+            item.setPrice(0.0);
+        }
+
         item.setTreatment(treatment);
-
+        serviceOrderItemRepository.save(item);
         treatment.getServiceOrderItems().add(item);
-
         recalculateTotal(treatment);
 
         treatmentRepository.save(treatment);

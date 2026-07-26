@@ -60,115 +60,202 @@
         </div>
 
         <!-- ================= KÊ THUỐC ================= -->
-        <div class="card mb-4 shadow-sm border-0">
-            <div class="card-header bg-dark text-white fw-bold">
-                💊 Kê đơn thuốc
+        <div class="card mb-4 shadow-sm border-0 exam-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span>💊 Kê đơn thuốc</span>
+                    <span class="badge bg-white text-primary fs-7">Danh mục thuốc: <span th:text="${medicines != null ? medicines.size() : 0}"></span></span>
+                </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Tên thuốc</th>
-                            <th>Liều dùng</th>
-                            <th>SL</th>
-                            <th>Đơn vị</th>
-                            <th>Ghi chú</th>
-                            <th class="text-center">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="m : ${treatment.prescriptionItems}">
-                            <td th:text="${m.medicineName}"></td>
-                            <td th:text="${m.dosage}"></td>
-                            <td th:text="${m.quantity}"></td>
-                            <td th:text="${m.unit}"></td>
-                            <td th:text="${m.note}"></td>
-                            <td class="text-center">
-                                <a th:href="@{/treatment/{id}/medicine/delete/{itemId}(id=${treatment.id},itemId=${m.id})}"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Xóa dòng thuốc này?')">Xóa</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="row gy-4">
+                    <div class="col-lg-8">
+                        <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+                            <table class="table table-bordered table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tên thuốc</th>
+                                        <th>Liều dùng</th>
+                                        <th>SL</th>
+                                        <th>Đơn vị</th>
+                                        <th>Đơn giá</th>
+                                        <th>Thành tiền</th>
+                                        <th>Ghi chú</th>
+                                        <th class="text-center">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="m : ${treatment.prescriptionItems}">
+                                        <td th:text="${m.medicineName}"></td>
+                                        <td th:text="${m.dosage}"></td>
+                                        <td th:text="${m.quantity}"></td>
+                                        <td th:text="${m.unit}"></td>
+                                        <td th:text="${m.price != null ? #numbers.formatDecimal(m.price, 0, 'COMMA', 2, 'POINT') : 0}"></td>
+                                        <td th:text="${m.lineTotal != null ? #numbers.formatDecimal(m.lineTotal, 0, 'COMMA', 2, 'POINT') : 0}"></td>
+                                        <td th:text="${m.note}"></td>
+                                        <td class="text-center">
+                                            <a th:href="@{/treatment/{id}/medicine/delete/{itemId}(id=${treatment.id},itemId=${m.id})}"
+                                               class="btn btn-outline-danger btn-sm"
+                                               onclick="return confirm('Xóa dòng thuốc này?')">Xóa</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-between align-items-center px-2">
+                            <div class="text-muted">Tổng số dòng thuốc: <strong th:text="${treatment.prescriptionItems != null ? treatment.prescriptionItems.size() : 0}">0</strong></div>
+                            <div class="fw-bold fs-5 text-danger">Tổng tiền thuốc: <span>---</span></div>
+                        </div>
+                    </div>
 
-                <form th:action="@{/treatment/{id}/medicine/add(id=${treatment.id})}" method="post" class="row g-2">
-                    <div class="col-md-3">
-                        <input type="text" name="medicineName" class="form-control" placeholder="Tên thuốc" required>
+                    <div class="col-lg-4">
+                        <div class="input-form-section">
+                            <h5 class="fw-bold">Thêm thuốc</h5>
+                            <form th:action="@{/treatment/{id}/medicine/add(id=${treatment.id})}" method="post" class="row g-3" id="prescription-form">
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Chọn thuốc</label>
+                                    <select name="medicineId" id="medicine-select" class="form-select" required>
+                                        <option value="">-- Chọn thuốc --</option>
+                                        <option th:each="medicine : ${medicines}"
+                                                th:value="${medicine.id}"
+                                                th:data-price="${medicine.price}"
+                                                th:data-unit="${medicine.unit}"
+                                                th:text="${medicine.medicineName + ' - ' + (medicine.price != null ? #numbers.formatDecimal(medicine.price, 0, 'COMMA', 2, 'POINT') + 'đ' : '0đ')}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Liều dùng</label>
+                                    <input type="text" name="dosage" id="medicine-dosage" class="form-control" placeholder="Ví dụ: 2 viên x 2 lần/ngày">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Số lượng</label>
+                                    <input type="number" name="quantity" id="medicine-quantity" class="form-control" placeholder="SL" min="1" value="1">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Đơn vị</label>
+                                    <input type="text" name="unit" id="medicine-unit" class="form-control" placeholder="Viên, vỉ, chai...">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Đơn giá</label>
+                                    <input type="text" id="medicine-price" class="form-control" placeholder="Tự động" readonly>
+                                    <input type="hidden" name="price" id="medicine-price-hidden" />
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Ghi chú</label>
+                                    <input type="text" name="note" class="form-control" placeholder="Ghi chú thêm">
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button class="btn btn-primary btn-add">Thêm thuốc</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <input type="text" name="dosage" class="form-control" placeholder="Liều dùng">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="number" name="quantity" class="form-control" placeholder="Số lượng">
-                    </div>
-                    <div class="col-md-2">
-                        <input type="text" name="unit" class="form-control" placeholder="Đơn vị">
-                    </div>
-                    <div class="col-md-1">
-                        <input type="text" name="note" class="form-control" placeholder="Ghi chú">
-                    </div>
-                    <div class="col-md-1">
-                        <button class="btn btn-success w-100 fw-bold">+</button>
-                    </div>
-                </form>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const medicineSelect = document.getElementById('medicine-select');
+                        const priceField = document.getElementById('medicine-price');
+                        const priceHidden = document.getElementById('medicine-price-hidden');
+                        const unitField = document.getElementById('medicine-unit');
+
+                        function updateMedicineFields() {
+                            const selected = medicineSelect.options[medicineSelect.selectedIndex];
+                            const price = selected.getAttribute('data-price');
+                            const unit = selected.getAttribute('data-unit');
+
+                            if (price) {
+                                priceField.value = Number(price).toLocaleString('vi-VN', {minimumFractionDigits: 0, maximumFractionDigits: 2}) + ' đ';
+                                priceHidden.value = price;
+                            } else {
+                                priceField.value = '';
+                                priceHidden.value = '';
+                            }
+                            if (unit) {
+                                unitField.value = unit;
+                            }
+                        }
+
+                        medicineSelect.addEventListener('change', updateMedicineFields);
+                    });
+                </script>
             </div>
         </div>
 
         <!-- ================= CHỈ ĐỊNH DỊCH VỤ ================= -->
-        <div class="card mb-4 shadow-sm border-0">
-            <div class="card-header bg-dark text-white fw-bold">
-                🛠️ Chỉ định dịch vụ
+        <div class="card mb-4 shadow-sm border-0 service-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span>🛠️ Chỉ định dịch vụ</span>
+                    <span class="badge bg-white text-primary fs-7">Số dịch vụ: <span th:text="${treatment.serviceOrderItems != null ? treatment.serviceOrderItems.size() : 0}"></span></span>
+                </div>
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Tên dịch vụ</th>
-                            <th>Đơn giá</th>
-                            <th>SL</th>
-                            <th>Thành tiền</th>
-                            <th>Ghi chú</th>
-                            <th class="text-center">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="s : ${treatment.serviceOrderItems}">
-                            <td th:text="${s.serviceName}"></td>
-                            <td th:text="${s.price}"></td>
-                            <td th:text="${s.quantity}"></td>
-                            <td th:text="${s.lineTotal}"></td>
-                            <td th:text="${s.note}"></td>
-                            <td class="text-center">
-                                <a th:href="@{/treatment/{id}/service/delete/{itemId}(id=${treatment.id},itemId=${s.id})}"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Xóa dịch vụ này?')">Xóa</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-2">
-                    <div class="col-md-4">
-                        <input type="text" name="serviceName" class="form-control" placeholder="Tên dịch vụ (vd: Nhổ răng...)" required>
+                <div class="row gy-4">
+                    <div class="col-lg-8">
+                        <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
+                            <table class="table table-bordered table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Đơn giá</th>
+                                        <th>SL</th>
+                                        <th>Thành tiền</th>
+                                        <th>Ghi chú</th>
+                                        <th class="text-center">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="s : ${treatment.serviceOrderItems}">
+                                        <td th:text="${s.serviceName}"></td>
+                                        <td th:text="${s.price}"></td>
+                                        <td th:text="${s.quantity}"></td>
+                                        <td th:text="${s.lineTotal}"></td>
+                                        <td th:text="${s.note}"></td>
+                                        <td class="text-center">
+                                            <a th:href="@{/treatment/{id}/service/delete/{itemId}(id=${treatment.id},itemId=${s.id})}"
+                                               class="btn btn-outline-danger btn-sm"
+                                               onclick="return confirm('Xóa dịch vụ này?')">Xóa</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="number" step="1000" name="price" class="form-control" placeholder="Đơn giá">
+                    <div class="col-lg-4">
+                        <div class="input-form-section">
+                            <h5 class="fw-bold">Thêm dịch vụ</h5>
+                            <form th:action="@{/treatment/{id}/service/add(id=${treatment.id})}" method="post" class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Tên dịch vụ</label>
+                                    <input type="text" name="serviceName" class="form-control" placeholder="Nhổ răng, cạo vôi..." required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Đơn giá</label>
+                                    <input type="number" step="1000" min="0" name="price" class="form-control" value="0" placeholder="Đơn giá" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Số lượng</label>
+                                    <input type="number" name="quantity" min="1" class="form-control" value="1" placeholder="Số lượng" required>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label fw-semibold">Ghi chú</label>
+                                    <input type="text" name="note" class="form-control" placeholder="Ghi chú">
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button class="btn btn-primary btn-add">Thêm dịch vụ</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mt-4 p-3 rounded-4 border border-2 border-primary bg-white shadow-sm">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-semibold">Tổng tiền dịch vụ</span>
+                                <span class="fw-bold text-danger" th:text="${treatment.totalAmount != null ? treatment.totalAmount : 0}">0</span>
+                            </div>
+                            <div class="text-muted small">Đơn vị: VNĐ</div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="number" name="quantity" class="form-control" value="1" placeholder="Số lượng">
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" name="note" class="form-control" placeholder="Ghi chú">
-                    </div>
-                    <div class="col-md-1">
-                        <button class="btn btn-success w-100 fw-bold">+</button>
-                    </div>
-                </form>
-
-                <p class="text-end fw-bold mt-3 fs-5 text-danger">
-                    Tổng tiền dịch vụ: <span th:text="${treatment.totalAmount != null ? treatment.totalAmount : 0}"></span> đ
-                </p>
+                </div>
             </div>
         </div>
 
