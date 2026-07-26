@@ -33,36 +33,63 @@
     <h2>Trang chủ</h2>
 
 
-    <!-- Chọn ngày xem lịch -->
+
+    <!-- Chọn ngày -->
 
     <div class="d-flex align-items-center gap-2 mt-3 mb-4">
 
-        <a class="btn btn-outline-primary"
+
+        <!-- Ngày trước -->
+
+        <a class="btn btn-sm btn-outline-primary"
            th:href="@{/home(date=${selectedDate.minusDays(1)})}">
             ← Ngày trước
         </a>
 
 
-        <a class="btn btn-primary"
-           th:href="@{/home}">
-            Hôm nay
-        </a>
 
 
-        <a class="btn btn-outline-primary"
+        <!-- Date picker -->
+
+        <form method="get"
+              action="/home">
+
+
+            <input type="date"
+                   name="date"
+                   class="form-control form-control-sm"
+                   th:value="${selectedDate}"
+                   onchange="this.form.submit()">
+
+
+        </form>
+
+
+
+
+
+        <!-- Ngày sau -->
+
+        <a class="btn btn-sm btn-outline-primary"
            th:href="@{/home(date=${selectedDate.plusDays(1)})}">
             Ngày sau →
         </a>
 
 
-        <h5 class="mb-0 ms-3">
-            📅 Ngày xem:
-            <span th:text="${selectedDate}">
-                2026-07-26
-            </span>
-        </h5>
+
+
+
+        <!-- Hôm nay -->
+
+        <a class="btn btn-sm btn-primary"
+           th:href="@{/home}">
+            Hôm nay
+        </a>
+
+
 
     </div>
+
 
 
 
@@ -97,6 +124,7 @@
 
 
 
+
         <div class="col-md-3">
 
             <div class="card text-bg-success">
@@ -114,6 +142,8 @@
             </div>
 
         </div>
+
+
 
 
 
@@ -141,6 +171,8 @@
 
 
 
+
+
         <div class="col-md-3">
 
             <div class="card text-bg-danger">
@@ -160,7 +192,9 @@
         </div>
 
 
+
     </div>
+
 
 
 
@@ -182,6 +216,7 @@
 
 
 
+
         <div class="card-body p-0">
 
 
@@ -189,6 +224,7 @@
 
 
                 <thead class="table-dark">
+
 
                 <tr>
 
@@ -209,10 +245,12 @@
 
 
 
+
                 <tbody>
 
 
-                <tr th:each="a : ${appointments}">
+
+                <tr th:each="a : ${appointmentList}">
 
 
                     <td th:text="${a.appointmentCode}">
@@ -220,9 +258,11 @@
                     </td>
 
 
+
                     <td th:text="${a.patient.fullName}">
                         Nguyễn Văn A
                     </td>
+
 
 
                     <td th:text="${a.appointmentTime}">
@@ -230,9 +270,13 @@
                     </td>
 
 
+
+
                     <td th:text="${a.status}">
                         Chờ khám
                     </td>
+
+
 
 
                     <td>
@@ -242,14 +286,19 @@
                             Vào khám
                         </a>
 
+
                     </td>
+
 
 
                 </tr>
 
 
 
-                <tr th:if="${#lists.isEmpty(appointments)}">
+
+
+                <tr th:if="${#lists.isEmpty(appointmentList)}">
+
 
                     <td colspan="5"
                         class="text-center text-muted">
@@ -258,7 +307,9 @@
 
                     </td>
 
+
                 </tr>
+
 
 
                 </tbody>
@@ -271,6 +322,7 @@
 
 
     </div>
+
 
 
 
@@ -292,10 +344,12 @@
 
 
 
+
         <div class="card-body">
 
 
             <ul class="list-group">
+
 
 
                 <li class="list-group-item"
@@ -308,12 +362,17 @@
 
 
                     -
+
                     <span th:text="${a.appointmentTime}">
                         08:00
                     </span>
 
 
+
                 </li>
+
+
+
 
 
                 <li class="list-group-item text-muted"
@@ -322,6 +381,7 @@
                     Không có bệnh nhân chờ khám
 
                 </li>
+
 
 
             </ul>
@@ -341,11 +401,15 @@
 
 
 
+
 <!-- Footer -->
+
 
 <div class="mt-auto"
      th:insert="~{layout/footer}">
 </div>
+
+
 
 
 
