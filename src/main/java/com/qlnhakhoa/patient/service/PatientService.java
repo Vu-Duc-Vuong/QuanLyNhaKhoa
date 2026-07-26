@@ -1,11 +1,16 @@
 package com.qlnhakhoa.patient.service;
 
 
+import com.qlnhakhoa.appointment.entity.Appointment;
+import com.qlnhakhoa.appointment.repository.AppointmentRepository;
 import com.qlnhakhoa.patient.entity.Patient;
 import com.qlnhakhoa.patient.repository.PatientRepository;
+import com.qlnhakhoa.treatment.entity.Treatment;
+import com.qlnhakhoa.treatment.repository.TreatmentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +21,12 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private TreatmentRepository treatmentRepository;
 
 
 
@@ -28,14 +39,12 @@ public class PatientService {
 
 
 
-
     // Lưu / cập nhật bệnh nhân
     public Patient savePatient(Patient patient){
 
         return patientRepository.save(patient);
 
     }
-
 
 
 
@@ -47,8 +56,6 @@ public class PatientService {
                 .orElse(null);
 
     }
-
-
 
 
 
@@ -100,14 +107,12 @@ public class PatientService {
     // Tìm kiếm bệnh nhân
     public List<Patient> searchPatient(String keyword){
 
-
         return patientRepository
                 .findByPatientCodeContainingIgnoreCaseOrFullNameContainingIgnoreCaseOrPhoneContainingIgnoreCase(
                         keyword,
                         keyword,
                         keyword
                 );
-
 
     }
 

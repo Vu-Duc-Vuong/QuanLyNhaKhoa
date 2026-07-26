@@ -1,83 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh Toán Hóa Đơn - Nha Khoa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Thanh toán hóa đơn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
-        @media print {
-            .no-print { display: none !important; }
-            body { background-color: #fff !important; padding: 0 !important; }
-            .invoice-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+        .invoice-card {
+            max-width: 650px;
+            margin: 30px auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .invoice-header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .qr-code-img {
+            max-width: 250px;
+            border: 2px solid #0d6efd;
+            border-radius: 8px;
+            padding: 5px;
         }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100 bg-light">
 
-    <!-- Thanh Menu / Navbar dùng chung -->
-    <div class="no-print" th:replace="~{layout/sidebar}"></div>
+<body class="bg-light d-flex flex-column min-vh-100">
 
-    <!-- Nội dung Hóa đơn -->
-    <div class="container py-4 flex-grow-1" style="max-width: 650px;">
-        <div class="card shadow-sm border-0 invoice-card">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h4 class="mb-0 fw-bold">NHA KHOA NỤ CƯỜI VIỆT</h4>
-                <small>HÓA ĐƠN THANH TOÁN DỊCH VỤ</small>
+    <div th:replace="~{layout/sidebar}"></div>
+
+    <div class="container my-auto">
+        <div class="card invoice-card border-0">
+            <div class="invoice-header">
+                <h3 class="fw-bold mb-0">HÓA ĐƠN THANH TOÁN DỊCH VỤ</h3>
             </div>
 
             <div class="card-body p-4">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <p class="mb-1 text-muted">Mã hóa đơn:</p>
-                        <h6 class="fw-bold text-dark" th:text="${'INV-' + invoice.id}">INV-1001</h6>
+                <div class="d-flex justify-content-between text-muted mb-3 border-bottom pb-2">
+                    <div>
+                        Mã bệnh nhân: <strong class="text-dark" th:text="${'BN-' + (invoice != null ? invoice.patientId : '')}">BN-0</strong>
                     </div>
-                    <div class="col-6 text-end">
-                        <p class="mb-1 text-muted">Ngày lập:</p>
-                        <h6 class="fw-bold text-dark" th:text="${invoice.createdDate}">2026-07-25</h6>
+                    <div>
+                        Ngày lập: <strong class="text-dark" th:text="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}">2026-07-26</strong>
                     </div>
                 </div>
-
-                <hr>
 
                 <div class="mb-3">
-                    <p class="mb-1"><strong>Họ và tên bệnh nhân:</strong> <span th:text="${invoice.patientName}">Nguyễn Văn A</span></p>
-                    <p class="mb-1"><strong>Nội dung khám / Dịch vụ:</strong> <span>Khám tổng quát & Điều trị Nha khoa</span></p>
+                    Mã hóa đơn: <strong class="text-primary" th:text="${'INV-' + (invoice != null ? invoice.id : '')}">INV-0</strong>
                 </div>
 
-                <div class="alert alert-info d-flex justify-content-between align-items-center my-3">
-                    <span class="fs-6 fw-bold">Tổng chi phí thanh toán:</span>
-                    <span class="fs-4 fw-bold text-danger" th:text="${#numbers.formatDecimal(invoice.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">500,000 VNĐ</span>
+                <div class="mb-4">
+                    <h5 class="fw-bold text-secondary">Thông Tin Bệnh Nhân:</h5>
+                    <p class="fs-5 mb-0">Họ và tên: <strong class="text-dark" th:text="${invoice != null ? invoice.patientName : 'N/A'}">Nguyễn Văn A</strong></p>
                 </div>
 
-                <div class="text-center bg-light p-3 rounded border my-4">
-                    <p class="fw-bold text-secondary mb-2">Quét mã QR để thanh toán qua Ngân hàng / Chuyển khoản</p>
-                    <img src="https://img.vietqr.io/image/MB-035123456789-compact.png" alt="Mã QR Thanh Toán" class="img-fluid rounded border shadow-sm" style="max-width: 220px;">
-                    <p class="small text-muted mt-2 mb-0">Nội dung chuyển khoản: <strong th:text="${'INV-' + invoice.id}">INV-1001</strong></p>
+                <div class="alert alert-info d-flex justify-content-between align-items-center p-3 my-4">
+                    <span class="fs-5 fw-bold text-dark">Tổng chi phí thanh toán:</span>
+                    <span class="fs-4 fw-bold text-danger" 
+                          th:text="${#numbers.formatDecimal(invoice != null ? invoice.amount : 0, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                        0 VNĐ
+                    </span>
                 </div>
 
-                <!-- Form gửi dữ liệu thật sang Báo cáo -->
-                <form th:action="@{/invoice/pay}" method="post" class="no-print mt-4">
-                    <input type="hidden" name="patientName" th:value="${invoice.patientName}">
-                    <input type="hidden" name="totalAmount" th:value="${invoice.totalAmount}">
-                    
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">
-                            ✅ Xác Nhận Thanh Toán & Lưu Báo Cáo
+                <div class="text-center my-4">
+                    <p class="fw-bold text-muted mb-2">Quét mã QR để chuyển khoản:</p>
+                    <img th:src="@{'https://api.vietqr.io/image/970422-0987654321-compact2.jpg?amount=' + ${invoice != null ? invoice.amount : 0} + '&addInfo=Thanh%20toan%20hoa%20don%20' + ${invoice != null ? invoice.id : 0}}"
+                         alt="Mã QR Thanh Toán VietQR" 
+                         class="qr-code-img img-fluid shadow-sm">
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+                    <a href="/treatment" class="btn btn-outline-secondary fw-bold px-4">
+                        ← Quay lại
+                    </a>
+                    <form th:action="@{/invoice/pay/{id}(id=${invoice != null ? invoice.id : 0})}" method="post">
+                        <button type="submit" class="btn btn-success fw-bold px-4 fs-5 shadow">
+                            ✅ Xác Nhận Đã Thanh Toán
                         </button>
-                        <button type="button" onclick="window.print()" class="btn btn-outline-primary">
-                            🖨️ In Hóa Đơn / Xuất PDF
-                        </button>
-                        <a href="/patient" class="btn btn-outline-secondary">Quay lại danh sách bệnh nhân</a>
-                    </div>
-                </form>
+                    </form>
+                </div>
 
             </div>
         </div>
     </div>
 
-    <!-- Footer dùng chung -->
-    <div class="mt-auto no-print" th:replace="~{layout/footer}"></div>
+    <div class="mt-auto" th:replace="~{layout/footer}"></div>
 
 </body>
 </html>
