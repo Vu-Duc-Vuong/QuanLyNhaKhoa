@@ -35,7 +35,7 @@
         <!-- ================= CHẨN ĐOÁN ================= -->
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-header bg-dark text-white fw-bold">
-                🩺 Chẩn đoán bệnh
+                Chẩn đoán bệnh
             </div>
             <div class="card-body">
                 <form th:action="@{/treatment/{id}/diagnosis(id=${treatment.id})}" method="post">
@@ -54,7 +54,7 @@
                         <textarea name="note" class="form-control" rows="2" th:text="${treatment.note}"></textarea>
                     </div>
 
-                    <button class="btn btn-primary fw-bold">💾 Lưu chẩn đoán</button>
+                    <button class="btn btn-primary fw-bold">Lưu chẩn đoán</button>
                 </form>
             </div>
         </div>
@@ -62,7 +62,7 @@
         <!-- ================= KÊ THUỐC ================= -->
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-header bg-dark text-white fw-bold">
-                💊 Kê đơn thuốc
+                Kê đơn thuốc
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-hover align-middle">
@@ -118,7 +118,7 @@
         <!-- ================= CHỈ ĐỊNH DỊCH VỤ ================= -->
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-header bg-dark text-white fw-bold">
-                🛠️ Chỉ định dịch vụ
+                Chỉ định dịch vụ
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-hover align-middle">
@@ -135,9 +135,9 @@
                     <tbody>
                         <tr th:each="s : ${treatment.serviceOrderItems}">
                             <td th:text="${s.serviceName}"></td>
-                            <td th:text="${s.price}"></td>
+                            <td th:text="${#numbers.formatDecimal(s.price != null ? s.price : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
                             <td th:text="${s.quantity}"></td>
-                            <td th:text="${s.lineTotal}"></td>
+                            <td th:text="${#numbers.formatDecimal(s.lineTotal != null ? s.lineTotal : 0, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
                             <td th:text="${s.note}"></td>
                             <td class="text-center">
                                 <a th:href="@{/treatment/{id}/service/delete/{itemId}(id=${treatment.id},itemId=${s.id})}"
@@ -167,20 +167,20 @@
                 </form>
 
                 <p class="text-end fw-bold mt-3 fs-5 text-danger">
-                    Tổng tiền dịch vụ: <span th:text="${treatment.totalAmount != null ? treatment.totalAmount : 0}"></span> đ
+                    Tổng tiền dịch vụ: <span th:text="${#numbers.formatDecimal(treatment.totalAmount != null ? treatment.totalAmount : 0, 0, 'COMMA', 0, 'POINT')}">0</span> đ
                 </p>
             </div>
         </div>
 
         <!-- ================= HOÀN TẤT KHÁM & TẠO HÓA ĐƠN ================= -->
         <div class="d-flex justify-content-between mb-5">
-            <a href="/treatment" class="btn btn-secondary fw-bold">← Quay lại danh sách chờ</a>
+            <a href="/treatment" class="btn btn-secondary fw-bold">Quay lại danh sách chờ</a>
 
-            <!-- Nút Hoàn tất khám luôn luôn hiển thị chuẩn 100% -->
+            <!-- Nút Hoàn tất khám -->
             <form th:action="@{/treatment/{id}/complete(id=${treatment.id})}" method="post">
                 <button type="submit" class="btn btn-success btn-lg fw-bold shadow"
                         onclick="return confirm('Xác nhận hoàn tất khám? Hệ thống sẽ tạo hóa đơn và chuyển sang trang thanh toán.')">
-                    ✅ Hoàn Tắt Khám & Tạo Hóa Đơn
+                    Hoàn Tất Khám & Tạo Hóa Đơn
                 </button>
             </form>
         </div>
