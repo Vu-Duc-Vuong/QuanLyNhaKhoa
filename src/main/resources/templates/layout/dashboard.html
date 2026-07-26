@@ -250,7 +250,7 @@
 
 
 
-                <tr th:each="a : ${appointmentList}">
+                <tr th:each="a : ${appointments}">
 
 
                     <td th:text="${a.appointmentCode}">
@@ -297,7 +297,7 @@
 
 
 
-                <tr th:if="${#lists.isEmpty(appointmentList)}">
+                <tr th:if="${#lists.isEmpty(appointments)}">
 
 
                     <td colspan="5"

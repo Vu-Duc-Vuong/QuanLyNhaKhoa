@@ -52,7 +52,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     // Lấy danh sách chờ khám trong ngày
-    List<Appointment> findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
+    // Không phân biệt hoa thường, hỗ trợ dư ký tự
+    List<Appointment> findByAppointmentDateAndStatusContainingIgnoreCaseOrderByAppointmentTimeAsc(
             LocalDate date,
             String status
     );

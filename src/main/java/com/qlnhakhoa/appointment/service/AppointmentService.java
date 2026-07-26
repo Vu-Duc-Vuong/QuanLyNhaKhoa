@@ -93,4 +93,11 @@ public class AppointmentService {
             appointmentRepository.save(appointment);
         }
     }
+        // Kiểm tra mã lịch hẹn đã tồn tại
+    public boolean existsByAppointmentCode(String code) {
+
+        return appointmentRepository
+                .existsByAppointmentCode(code);
+
+    }
 }

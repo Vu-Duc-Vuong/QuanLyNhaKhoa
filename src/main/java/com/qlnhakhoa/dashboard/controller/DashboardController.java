@@ -62,7 +62,6 @@ public class DashboardController {
 
 
 
-
         // Tổng bệnh nhân
         long totalPatients =
                 patientRepository.count();
@@ -71,7 +70,7 @@ public class DashboardController {
 
 
 
-        // Lịch theo ngày đang chọn
+        // Lịch hẹn theo ngày đang xem
         List<Appointment> appointmentList =
                 appointmentRepository
                         .findByAppointmentDateOrderByAppointmentTimeAsc(
@@ -82,10 +81,10 @@ public class DashboardController {
 
 
 
-        // Lịch đang chờ khám trong ngày
+        // Danh sách chờ khám
         List<Appointment> waitingList =
                 appointmentRepository
-                        .findByAppointmentDateAndStatusOrderByAppointmentTimeAsc(
+                        .findByAppointmentDateAndStatusContainingIgnoreCaseOrderByAppointmentTimeAsc(
                                 selectedDate,
                                 "Chờ khám"
                         );
@@ -116,10 +115,12 @@ public class DashboardController {
         );
 
 
+
         model.addAttribute(
                 "todayAppointments",
                 appointmentList.size()
         );
+
 
 
         model.addAttribute(
@@ -128,17 +129,27 @@ public class DashboardController {
         );
 
 
+
+        // Quan trọng: HTML đang dùng appointments
         model.addAttribute(
-                "appointmentList",
+                "appointments",
                 appointmentList
         );
 
 
-        // ngày đang xem
+
+        model.addAttribute(
+                "waitingList",
+                waitingList
+        );
+
+
+
         model.addAttribute(
                 "selectedDate",
                 selectedDate
         );
+
 
 
         model.addAttribute(
