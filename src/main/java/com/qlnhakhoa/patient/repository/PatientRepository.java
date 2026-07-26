@@ -19,5 +19,5 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
             String phone
     );
 
-
+    boolean existsByPatientCode(String patientCode);
 }

@@ -33,15 +33,27 @@ public class MedicineController {
         return "medicine/add";
     }
 
-    // Lưu thêm / cập nhật thuốc (Tự động nối tiền tố MED- nếu chưa có)
+    // Lưu thêm / cập nhật thuốc
     @PostMapping("/medicine/save")
-    public String saveMedicine(@ModelAttribute Medicine medicine) {
+    public String saveMedicine(@ModelAttribute Medicine medicine, Model model) {
+
+        // Tự động thêm tiền tố MED-
         if (medicine.getMedicineCode() != null && !medicine.getMedicineCode().trim().isEmpty()) {
             String code = medicine.getMedicineCode().trim();
             if (!code.toUpperCase().startsWith("MED-")) {
                 medicine.setMedicineCode("MED-" + code);
             }
         }
+
+        // Kiểm tra trùng mã thuốc (chỉ khi thêm mới)
+        if (medicine.getId() == null
+                && medicineService.existsByMedicineCode(medicine.getMedicineCode())) {
+
+            model.addAttribute("medicine", medicine);
+            model.addAttribute("error", "Mã thuốc đã tồn tại!");
+            return "medicine/add";
+        }
+
         medicineService.saveMedicine(medicine);
         return "redirect:/medicine";
     }

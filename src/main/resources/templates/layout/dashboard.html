@@ -8,7 +8,7 @@
     <title>Trang chủ</title>
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
 
@@ -17,16 +17,11 @@
 </head>
 
 
-
 <body class="d-flex flex-column min-vh-100">
 
 
-
 <!-- Menu ngang -->
-
 <div th:insert="~{layout/sidebar}"></div>
-
-
 
 
 
@@ -35,10 +30,45 @@
 <div class="container-fluid p-4 flex-grow-1">
 
 
-
     <h2>Trang chủ</h2>
 
 
+    <!-- Chọn ngày xem lịch -->
+
+    <div class="d-flex align-items-center gap-2 mt-3 mb-4">
+
+        <a class="btn btn-outline-primary"
+           th:href="@{/home(date=${selectedDate.minusDays(1)})}">
+            ← Ngày trước
+        </a>
+
+
+        <a class="btn btn-primary"
+           th:href="@{/home}">
+            Hôm nay
+        </a>
+
+
+        <a class="btn btn-outline-primary"
+           th:href="@{/home(date=${selectedDate.plusDays(1)})}">
+            Ngày sau →
+        </a>
+
+
+        <h5 class="mb-0 ms-3">
+            📅 Ngày xem:
+            <span th:text="${selectedDate}">
+                2026-07-26
+            </span>
+        </h5>
+
+    </div>
+
+
+
+
+
+    <!-- Thống kê -->
 
 
     <div class="row mt-4">
@@ -53,7 +83,9 @@
 
                     <h5>Tổng bệnh nhân</h5>
 
-                    <h2>120</h2>
+                    <h2 th:text="${totalPatients}">
+                        0
+                    </h2>
 
                 </div>
 
@@ -71,9 +103,11 @@
 
                 <div class="card-body">
 
-                    <h5>Lịch hẹn hôm nay</h5>
+                    <h5>Lịch hẹn trong ngày</h5>
 
-                    <h2>18</h2>
+                    <h2 th:text="${todayAppointments}">
+                        0
+                    </h2>
 
                 </div>
 
@@ -93,7 +127,9 @@
 
                     <h5>Đang chờ khám</h5>
 
-                    <h2>8</h2>
+                    <h2 th:text="${waitingAppointments}">
+                        0
+                    </h2>
 
                 </div>
 
@@ -113,7 +149,9 @@
 
                     <h5>Doanh thu</h5>
 
-                    <h2>5.2M</h2>
+                    <h2 th:text="${#numbers.formatDecimal(revenue,0,'COMMA',0,'POINT') + ' VNĐ'}">
+                        0 VNĐ
+                    </h2>
 
                 </div>
 
@@ -122,13 +160,182 @@
         </div>
 
 
+    </div>
+
+
+
+
+
+
+
+    <!-- Danh sách lịch hẹn -->
+
+
+    <div class="card mt-4 shadow-sm">
+
+
+        <div class="card-header fw-bold">
+
+            Lịch hẹn trong ngày
+
+        </div>
+
+
+
+        <div class="card-body p-0">
+
+
+            <table class="table table-hover mb-0">
+
+
+                <thead class="table-dark">
+
+                <tr>
+
+                    <th>Mã lịch</th>
+
+                    <th>Bệnh nhân</th>
+
+                    <th>Giờ</th>
+
+                    <th>Trạng thái</th>
+
+                    <th>Thao tác</th>
+
+                </tr>
+
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                <tr th:each="a : ${appointments}">
+
+
+                    <td th:text="${a.appointmentCode}">
+                        LH-01
+                    </td>
+
+
+                    <td th:text="${a.patient.fullName}">
+                        Nguyễn Văn A
+                    </td>
+
+
+                    <td th:text="${a.appointmentTime}">
+                        08:00
+                    </td>
+
+
+                    <td th:text="${a.status}">
+                        Chờ khám
+                    </td>
+
+
+                    <td>
+
+                        <a class="btn btn-sm btn-success"
+                           th:href="@{/treatment}">
+                            Vào khám
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+
+
+                <tr th:if="${#lists.isEmpty(appointments)}">
+
+                    <td colspan="5"
+                        class="text-center text-muted">
+
+                        Không có lịch hẹn
+
+                    </td>
+
+                </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
 
 
     </div>
 
 
-</div>
 
+
+
+
+
+    <!-- Danh sách chờ khám -->
+
+
+    <div class="card mt-4 shadow-sm">
+
+
+        <div class="card-header fw-bold">
+
+            Danh sách chờ khám
+
+        </div>
+
+
+
+        <div class="card-body">
+
+
+            <ul class="list-group">
+
+
+                <li class="list-group-item"
+                    th:each="a : ${waitingList}">
+
+
+                    <b th:text="${a.patient.fullName}">
+                        Bệnh nhân
+                    </b>
+
+
+                    -
+                    <span th:text="${a.appointmentTime}">
+                        08:00
+                    </span>
+
+
+                </li>
+
+
+                <li class="list-group-item text-muted"
+                    th:if="${#lists.isEmpty(waitingList)}">
+
+                    Không có bệnh nhân chờ khám
+
+                </li>
+
+
+            </ul>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+</div>
 
 
 
@@ -145,7 +352,6 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-
 
 
 </body>

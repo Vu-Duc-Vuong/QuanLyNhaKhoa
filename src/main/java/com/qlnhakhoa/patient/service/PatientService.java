@@ -36,7 +36,10 @@ public class PatientService {
         return patientRepository.findAll();
 
     }
-
+    // Kiểm tra mã bệnh nhân đã tồn tại
+public boolean existsByPatientCode(String patientCode) {
+    return patientRepository.existsByPatientCode(patientCode);
+}
 
 
     // Lưu / cập nhật bệnh nhân

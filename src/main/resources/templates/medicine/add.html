@@ -75,6 +75,11 @@
                 Thêm mới thuốc
             </div>
             <div class="card-body p-4">
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Lỗi!</strong>
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
                 <form th:action="@{/medicine/save}" th:object="${medicine}" method="post">
                     
                     <div class="mb-3">

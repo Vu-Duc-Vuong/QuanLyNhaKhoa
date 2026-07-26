@@ -11,7 +11,13 @@ import java.util.List;
 @Repository
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
+    // Kiểm tra mã thuốc đã tồn tại
+    boolean existsByMedicineCode(String medicineCode);
+
     // Tìm CHÍNH XÁC mã thuốc HOẶC tìm GẦN ĐÚNG theo tên thuốc
     @Query("SELECT m FROM Medicine m WHERE m.medicineCode = :exactCode OR LOWER(m.medicineName) LIKE LOWER(CONCAT('%', :nameKeyword, '%'))")
-    List<Medicine> searchCustom(@Param("exactCode") String exactCode, @Param("nameKeyword") String nameKeyword);
+    List<Medicine> searchCustom(
+            @Param("exactCode") String exactCode,
+            @Param("nameKeyword") String nameKeyword
+    );
 }
