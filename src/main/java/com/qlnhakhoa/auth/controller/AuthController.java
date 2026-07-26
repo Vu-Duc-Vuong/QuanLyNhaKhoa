@@ -29,7 +29,6 @@ public class AuthController {
     ) {
 
 
-        // Sai tài khoản hoặc mật khẩu
         if(error != null){
 
             model.addAttribute(
@@ -41,7 +40,6 @@ public class AuthController {
 
 
 
-        // Đăng ký thành công
         if(registerSuccess != null){
 
             model.addAttribute(
@@ -62,9 +60,14 @@ public class AuthController {
 
     // Trang đăng ký
     @GetMapping("/register")
-    public String registerPage(
-            RegisterRequest request
-    ) {
+    public String registerPage(Model model) {
+
+
+        model.addAttribute(
+                "registerRequest",
+                new RegisterRequest()
+        );
+
 
         return "auth/register";
 
@@ -88,17 +91,21 @@ public class AuthController {
             authService.register(request);
 
 
-            // chuyển sang login + thông báo thành công
             return "redirect:/login?registerSuccess=true";
 
 
         } catch (RuntimeException e) {
 
 
-            // lỗi trùng tài khoản/email/sđt
             model.addAttribute(
                     "errorMessage",
                     e.getMessage()
+            );
+
+
+            model.addAttribute(
+                    "registerRequest",
+                    request
             );
 
 
