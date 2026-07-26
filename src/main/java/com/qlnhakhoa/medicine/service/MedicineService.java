@@ -18,6 +18,11 @@ public class MedicineService {
         return medicineRepository.findAll();
     }
 
+    // Kiểm tra mã thuốc đã tồn tại
+    public boolean existsByMedicineCode(String medicineCode) {
+        return medicineRepository.existsByMedicineCode(medicineCode);
+    }
+
     // Lưu / Cập nhật thông tin thuốc
     public Medicine saveMedicine(Medicine medicine) {
         return medicineRepository.save(medicine);
@@ -41,13 +46,12 @@ public class MedicineService {
 
         String trimmed = keyword.trim();
 
-        // Chuẩn hóa exactCode: Nếu người dùng nhập "002" hoặc "MED-002", tự động thành "MED-002"
+        // Chuẩn hóa exactCode
         String exactCode = trimmed;
         if (!exactCode.toUpperCase().startsWith("MED-")) {
             exactCode = "MED-" + trimmed;
         }
 
-        // Truyền exactCode (MED-002) để tìm chính xác mã, và trimmed để tìm gần đúng tên
         return medicineRepository.searchCustom(exactCode, trimmed);
     }
 }
