@@ -1,6 +1,5 @@
 package com.qlnhakhoa.treatment.service;
 
-
 import com.qlnhakhoa.appointment.entity.Appointment;
 import com.qlnhakhoa.appointment.repository.AppointmentRepository;
 import com.qlnhakhoa.invoice.service.InvoiceService;
@@ -20,18 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Service
 public class TreatmentService {
-
 
     // Trạng thái lịch hẹn khi bệnh nhân đang ở phòng khám, chờ bác sĩ xử lý hồ sơ
     private static final String STATUS_DANG_KHAM = "Đang khám";
 
     // Trạng thái khi đã hoàn tất khám
     private static final String STATUS_HOAN_THANH = "Hoàn thành";
-
-
 
     @Autowired
     private TreatmentRepository treatmentRepository;
@@ -51,7 +46,6 @@ public class TreatmentService {
     @Autowired
     private MedicineService medicineService;
 
-
     // ================== DANH SÁCH BỆNH NHÂN CHỜ ==================
 
     // Lấy danh sách lịch hẹn đang chờ xử lý tại phòng khám (status = "Đang khám")
@@ -61,8 +55,11 @@ public class TreatmentService {
 
     }
 
+    public List<Treatment> getAllTreatments() {
 
+        return treatmentRepository.findAll();
 
+    }
     // ================== HỒ SƠ KHÁM ==================
 
     // Lấy hồ sơ khám của 1 lịch hẹn, nếu chưa có thì tự tạo mới
@@ -73,8 +70,6 @@ public class TreatmentService {
                 .orElseGet(() -> createTreatment(appointmentId));
 
     }
-
-
 
     private Treatment createTreatment(Long appointmentId) {
 
@@ -100,8 +95,6 @@ public class TreatmentService {
 
     }
 
-
-
     public Treatment getTreatmentById(Long id) {
 
         return treatmentRepository
@@ -110,20 +103,15 @@ public class TreatmentService {
 
     }
 
-
-
     // Tìm kiếm hồ sơ khám theo mã hồ sơ hoặc tên bệnh nhân
     public List<Treatment> search(String keyword) {
 
         return treatmentRepository
                 .findByTreatmentCodeContainingIgnoreCaseOrAppointment_Patient_FullNameContainingIgnoreCase(
                         keyword,
-                        keyword
-                );
+                        keyword);
 
     }
-
-
 
     // ================== CHẨN ĐOÁN ==================
 
@@ -142,8 +130,6 @@ public class TreatmentService {
         treatmentRepository.save(treatment);
 
     }
-
-
 
     // ================== KÊ THUỐC ==================
 
@@ -174,7 +160,8 @@ public class TreatmentService {
             }
         }
 
-        // Lưu trực tiếp dòng thuốc, không đụng vào collection prescriptionItems của Treatment
+        // Lưu trực tiếp dòng thuốc, không đụng vào collection prescriptionItems của
+        // Treatment
         // (tránh xung đột với cascade/orphanRemoval khi Hibernate flush)
         item.setId(null);
         item.setTreatment(treatment);
@@ -183,8 +170,6 @@ public class TreatmentService {
         recalculateAndSaveTotal(treatment);
 
     }
-
-
 
     @Transactional
     public void deletePrescriptionItem(Long itemId) {
@@ -204,8 +189,6 @@ public class TreatmentService {
 
     }
 
-
-
     // ================== CHỈ ĐỊNH DỊCH VỤ ==================
 
     @Transactional
@@ -224,7 +207,8 @@ public class TreatmentService {
             item.setPrice(0.0);
         }
 
-        // Lưu trực tiếp dòng dịch vụ, không đụng vào collection serviceOrderItems của Treatment
+        // Lưu trực tiếp dòng dịch vụ, không đụng vào collection serviceOrderItems của
+        // Treatment
         // (tránh xung đột với cascade/orphanRemoval khi Hibernate flush)
         item.setId(null);
         item.setTreatment(treatment);
@@ -233,8 +217,6 @@ public class TreatmentService {
         recalculateAndSaveTotal(treatment);
 
     }
-
-
 
     @Transactional
     public void deleteServiceOrderItem(Long itemId) {
@@ -255,9 +237,8 @@ public class TreatmentService {
 
     }
 
-
-
-    // Tính lại tổng tiền dựa trên dữ liệu THẬT trong DB (không dùng list trong bộ nhớ của Treatment)
+    // Tính lại tổng tiền dựa trên dữ liệu THẬT trong DB (không dùng list trong bộ
+    // nhớ của Treatment)
     // Tổng tiền khám = tổng tiền thuốc + tổng tiền dịch vụ
     private void recalculateAndSaveTotal(Treatment treatment) {
 
@@ -280,8 +261,6 @@ public class TreatmentService {
 
     }
 
-
-
     // ================== HOÀN TẤT KHÁM ==================
 
     public Treatment completeTreatment(Long treatmentId) {
@@ -300,7 +279,6 @@ public class TreatmentService {
 
         treatmentRepository.save(treatment);
 
-
         // Cập nhật trạng thái lịch hẹn tương ứng
         Appointment appointment = treatment.getAppointment();
 
@@ -312,7 +290,6 @@ public class TreatmentService {
 
         }
 
-
         // Tạo hóa đơn thanh toán cho lượt khám này
         String patientName = (appointment != null && appointment.getPatient() != null)
                 ? appointment.getPatient().getFullName()
@@ -320,10 +297,67 @@ public class TreatmentService {
 
         invoiceService.createInvoice(patientName, treatment.getTotalAmount());
 
-
         return treatment;
 
     }
 
+    // ================== CẬP NHẬT HỒ SƠ SAU KHI HOÀN THÀNH ==================
 
+    @Transactional
+    public void updateTreatment(Long treatmentId) {
+
+        Treatment treatment = getTreatmentById(treatmentId);
+
+        if (treatment == null) {
+            return;
+        }
+
+        // Tính lại tiền thuốc + dịch vụ sau khi sửa
+        recalculateAndSaveTotal(treatment);
+
+        // Giữ trạng thái hoàn thành sau khi cập nhật
+        treatment.setStatus(STATUS_HOAN_THANH);
+
+        // Lưu lại hồ sơ
+        treatmentRepository.save(treatment);
+
+    }
+
+@Transactional
+public void deleteTreatment(Long id) {
+
+    Treatment treatment = getTreatmentById(id);
+
+    if (treatment == null) {
+        return;
+    }
+
+
+    // Xóa thuốc theo treatment_id
+    List<PrescriptionItem> medicines =
+            prescriptionItemRepository.findByTreatmentId(id);
+
+    if (medicines != null && !medicines.isEmpty()) {
+
+        prescriptionItemRepository.deleteAll(medicines);
+
+    }
+
+
+
+    // Xóa dịch vụ theo treatment_id
+    List<ServiceOrderItem> services =
+            serviceOrderItemRepository.findByTreatmentId(id);
+
+    if (services != null && !services.isEmpty()) {
+
+        serviceOrderItemRepository.deleteAll(services);
+
+    }
+
+
+
+    // Xóa hồ sơ khám
+    treatmentRepository.delete(treatment);
+}
 }

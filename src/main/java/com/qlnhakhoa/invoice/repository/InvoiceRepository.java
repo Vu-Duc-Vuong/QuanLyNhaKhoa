@@ -15,9 +15,13 @@ public interface InvoiceRepository
 
 
 
-    // Tính tổng doanh thu
-    @Query("SELECT SUM(i.amount) FROM Invoice i")
-    Double sumTotalAmount();
+    // Tổng doanh thu chỉ tính hóa đơn đã thanh toán
+    @Query("""
+           SELECT SUM(i.amount)
+           FROM Invoice i
+           WHERE i.paymentStatus = 'PAID'
+           """)
+    Double sumPaidAmount();
 
 
 

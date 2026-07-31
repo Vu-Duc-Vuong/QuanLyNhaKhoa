@@ -248,18 +248,49 @@
             </div>
         </div>
 
-        <!-- ================= HOÀN TẤT KHÁM & TẠO HÓA ĐƠN ================= -->
-        <div class="d-flex justify-content-between mb-5">
-            <a href="/treatment" class="btn btn-secondary fw-bold">Quay lại danh sách chờ</a>
+<!-- ================= CẬP NHẬT / HOÀN TẤT KHÁM ================= -->
+<div class="d-flex justify-content-between mb-5">
 
-            <!-- Nút Hoàn tất khám -->
-            <form th:action="@{/treatment/{id}/complete(id=${treatment.id})}" method="post">
-                <button type="submit" class="btn btn-success btn-lg fw-bold shadow"
-                        onclick="return confirm('Xác nhận hoàn tất khám? Hệ thống sẽ tạo hóa đơn và chuyển sang trang thanh toán.')">
-                    Hoàn Tất Khám & Tạo Hóa Đơn
-                </button>
-            </form>
-        </div>
+    <a href="/treatment"
+       class="btn btn-secondary fw-bold">
+        Quay lại danh sách chờ
+    </a>
+
+
+    <!-- Nếu đang khám -->
+    <form th:if="${treatment.status != 'Hoàn thành'}"
+          th:action="@{/treatment/{id}/complete(id=${treatment.id})}"
+          method="post">
+
+        <button type="submit"
+                class="btn btn-success btn-lg fw-bold shadow"
+                onclick="return confirm('Xác nhận hoàn tất khám? Hệ thống sẽ tạo hóa đơn và chuyển sang thanh toán.')">
+
+            Hoàn Tất Khám & Tạo Hóa Đơn
+
+        </button>
+
+    </form>
+
+
+
+    <!-- Nếu đã hoàn thành và đang sửa -->
+    <form th:if="${treatment.status == 'Hoàn thành'}"
+          th:action="@{/treatment/{id}/update(id=${treatment.id})}"
+          method="post">
+
+        <button type="submit"
+                class="btn btn-warning btn-lg fw-bold shadow"
+                onclick="return confirm('Xác nhận cập nhật lại hồ sơ khám?')">
+
+            Cập Nhật Hồ Sơ Khám
+
+        </button>
+
+    </form>
+
+
+</div>
 
     </div>
 

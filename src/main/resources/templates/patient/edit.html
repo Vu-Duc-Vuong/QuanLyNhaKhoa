@@ -3,168 +3,250 @@
 
 <head>
     <meta charset="UTF-8">
+
     <title>Sửa bệnh nhân</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 
-<body>
-
-<div class="container mt-5">
-
-    <h2>Sửa bệnh nhân</h2>
+<body class="d-flex flex-column min-vh-100">
 
 
-    <form th:action="@{/patient/save}" method="post">
-
-
-        <input type="hidden"
-               name="id"
-               th:value="${patient.id}">
+<!-- Sidebar -->
+<div th:replace="~{layout/sidebar}"></div>
 
 
 
-        <div class="mb-3">
-            <label>Mã bệnh nhân</label>
-
-            <input type="text"
-                   name="patientCode"
-                   class="form-control"
-                   th:value="${patient.patientCode}"
-                   readonly>
-        </div>
+<div class="container mt-4 flex-grow-1">
 
 
+    <div class="card shadow p-4">
 
-        <div class="mb-3">
-            <label>Họ tên</label>
 
-            <input type="text"
-                   name="fullName"
-                   class="form-control"
-                   th:value="${patient.fullName}">
-        </div>
+        <h2 class="mb-4 text-primary">
+            Sửa bệnh nhân
+        </h2>
 
 
 
-        <div class="mb-3">
-            <label>Ngày sinh</label>
+        <form th:action="@{/patient/save}" method="post">
 
-            <input type="date"
-                   name="dateOfBirth"
-                   class="form-control"
-                   th:value="${patient.dateOfBirth}">
-        </div>
+
+            <input type="hidden"
+                   name="id"
+                   th:value="${patient.id}">
 
 
 
-        <div class="mb-3">
+            <div class="mb-3">
 
-            <label>Giới tính</label>
+                <label class="form-label">
+                    Mã bệnh nhân
+                </label>
 
-            <select name="gender"
-                    class="form-control">
+                <input type="text"
+                       class="form-control"
+                       name="patientCode"
+                       th:value="${patient.patientCode}"
+                       readonly>
 
-                <option th:selected="${patient.gender == 'Nam'}">
-                    Nam
-                </option>
-
-                <option th:selected="${patient.gender == 'Nữ'}">
-                    Nữ
-                </option>
-
-            </select>
-
-        </div>
+            </div>
 
 
 
-        <div class="mb-3">
-            <label>Số điện thoại</label>
 
-            <input type="text"
-                   name="phone"
-                   class="form-control"
-                   th:value="${patient.phone}">
-        </div>
+            <div class="mb-3">
 
+                <label class="form-label">
+                    Họ tên
+                </label>
 
+                <input type="text"
+                       class="form-control"
+                       name="fullName"
+                       th:value="${patient.fullName}"
+                       required>
 
-        <div class="mb-3">
-            <label>Địa chỉ</label>
-
-            <input type="text"
-                   name="address"
-                   class="form-control"
-                   th:value="${patient.address}">
-        </div>
+            </div>
 
 
 
-        <div class="mb-3">
-            <label>CCCD</label>
 
-            <input type="text"
-                   name="cccd"
-                   class="form-control"
-                   th:value="${patient.cccd}">
-        </div>
+            <div class="mb-3">
 
+                <label class="form-label">
+                    Ngày sinh
+                </label>
 
+                <input type="date"
+                       class="form-control"
+                       name="dateOfBirth"
+                       th:value="${patient.dateOfBirth}">
 
-        <div class="mb-3">
-            <label>Tiền sử bệnh</label>
-
-            <textarea name="medicalHistory"
-                      class="form-control"
-                      th:text="${patient.medicalHistory}">
-            </textarea>
-
-        </div>
+            </div>
 
 
 
-        <div class="mb-3">
-            <label>Dị ứng</label>
 
-            <textarea name="allergy"
-                      class="form-control"
-                      th:text="${patient.allergy}">
-            </textarea>
+            <div class="mb-3">
 
-        </div>
+                <label class="form-label">
+                    Giới tính
+                </label>
 
-
-
-        <div class="mb-3">
-            <label>Lý do khám</label>
-
-            <textarea name="reason"
-                      class="form-control"
-                      th:text="${patient.reason}">
-            </textarea>
-
-        </div>
+                <select name="gender"
+                        class="form-select">
 
 
-
-        <button class="btn btn-success">
-            Cập nhật
-        </button>
-
-
-        <a href="/patient"
-           class="btn btn-secondary">
-            Quay lại
-        </a>
+                    <option value="Nam"
+                            th:selected="${patient.gender == 'Nam'}">
+                        Nam
+                    </option>
 
 
-    </form>
+                    <option value="Nữ"
+                            th:selected="${patient.gender == 'Nữ'}">
+                        Nữ
+                    </option>
+
+
+                </select>
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Số điện thoại
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       name="phone"
+                       th:value="${patient.phone}">
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Địa chỉ
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       name="address"
+                       th:value="${patient.address}">
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    CCCD
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       name="cccd"
+                       th:value="${patient.cccd}">
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Tiền sử bệnh
+                </label>
+
+                <textarea name="medicalHistory"
+                          class="form-control"
+                          rows="3"
+                          th:text="${patient.medicalHistory}">
+                </textarea>
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Dị ứng
+                </label>
+
+                <textarea name="allergy"
+                          class="form-control"
+                          rows="3"
+                          th:text="${patient.allergy}">
+                </textarea>
+
+            </div>
+
+
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Lý do khám
+                </label>
+
+                <textarea name="reason"
+                          class="form-control"
+                          rows="3"
+                          th:text="${patient.reason}">
+                </textarea>
+
+            </div>
+
+
+
+
+            <button class="btn btn-primary">
+                Cập nhật
+            </button>
+
+
+            <a href="/patient"
+               class="btn btn-secondary">
+                Quay lại
+            </a>
+
+
+
+        </form>
+
+
+    </div>
 
 
 </div>
+
+
+
+
+<div class="mt-auto"
+     th:replace="~{layout/footer}">
+</div>
+
 
 </body>
 

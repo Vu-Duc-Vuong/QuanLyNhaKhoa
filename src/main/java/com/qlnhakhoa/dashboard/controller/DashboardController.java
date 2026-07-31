@@ -84,7 +84,7 @@ public class DashboardController {
 
 
         Double revenue =
-                invoiceRepository.sumTotalAmount();
+        invoiceRepository.sumPaidAmount();
 
 
         if(revenue == null){

@@ -1,6 +1,4 @@
 # QuanLyNhaKhoa
-chạy test mvn test
-
 
 chay project ./mvnw spring-boot:run
 (Tải các thư viện còn thiếu,maven, ...)
