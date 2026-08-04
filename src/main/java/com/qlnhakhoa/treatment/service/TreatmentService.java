@@ -152,11 +152,19 @@ public class TreatmentService {
         if (item.getMedicineId() != null) {
             Medicine medicine = medicineService.getMedicineById(item.getMedicineId());
             if (medicine != null) {
+                Integer availableQuantity = medicine.getQuantity() == null ? 0 : medicine.getQuantity();
+                if (availableQuantity < item.getQuantity()) {
+                    throw new RuntimeException("Thuốc " + medicine.getMedicineName() + " không đủ tồn kho.");
+                }
+
                 item.setMedicineName(medicine.getMedicineName());
                 item.setPrice(medicine.getPrice());
                 if (item.getUnit() == null || item.getUnit().isBlank()) {
                     item.setUnit(medicine.getUnit());
                 }
+
+                medicine.setQuantity(availableQuantity - item.getQuantity());
+                medicineService.saveMedicine(medicine);
             }
         }
 
@@ -178,6 +186,16 @@ public class TreatmentService {
                 .ifPresent(item -> {
 
                     Treatment treatment = item.getTreatment();
+
+                    if (item.getMedicineId() != null) {
+                        Medicine medicine = medicineService.getMedicineById(item.getMedicineId());
+                        if (medicine != null) {
+                            Integer currentQuantity = medicine.getQuantity() == null ? 0 : medicine.getQuantity();
+                            Integer restoreQuantity = item.getQuantity() == null ? 0 : item.getQuantity();
+                            medicine.setQuantity(currentQuantity + restoreQuantity);
+                            medicineService.saveMedicine(medicine);
+                        }
+                    }
 
                     prescriptionItemRepository.deleteById(itemId);
 

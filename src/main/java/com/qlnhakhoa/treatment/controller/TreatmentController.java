@@ -196,14 +196,30 @@ public class TreatmentController {
     @PostMapping("/treatment/{id}/medicine/add")
     public String addMedicine(
             @PathVariable Long id,
-            @ModelAttribute PrescriptionItem prescriptionItem
+            @ModelAttribute PrescriptionItem prescriptionItem,
+            RedirectAttributes redirectAttributes
     ){
 
+        try {
 
-        treatmentService.addPrescriptionItem(
-                id,
-                prescriptionItem
-        );
+            treatmentService.addPrescriptionItem(
+                    id,
+                    prescriptionItem
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Đã thêm thuốc và cập nhật tồn kho."
+            );
+
+        } catch (RuntimeException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    e.getMessage()
+            );
+
+        }
 
 
         return "redirect:/treatment/exam/"
@@ -216,11 +232,17 @@ public class TreatmentController {
     @GetMapping("/treatment/{id}/medicine/delete/{itemId}")
     public String deleteMedicine(
             @PathVariable Long id,
-            @PathVariable Long itemId
+            @PathVariable Long itemId,
+            RedirectAttributes redirectAttributes
     ){
 
 
         treatmentService.deletePrescriptionItem(itemId);
+
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Đã xóa dòng thuốc và hoàn lại tồn kho."
+        );
 
 
         return "redirect:/treatment/exam/"

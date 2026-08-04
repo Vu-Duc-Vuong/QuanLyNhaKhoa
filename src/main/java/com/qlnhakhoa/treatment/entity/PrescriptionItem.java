@@ -2,7 +2,6 @@ package com.qlnhakhoa.treatment.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.persistence.Transient;
 
 // Một dòng thuốc trong đơn kê thuốc của hồ sơ khám
 // Lưu ý: hiện tại nhập tên thuốc trực tiếp (chưa liên kết bảng danh mục thuốc
@@ -24,7 +23,7 @@ public class PrescriptionItem {
     private Treatment treatment;
 
     // Liên kết tới danh mục thuốc
-    @Transient
+    @Column(name = "medicine_id")
     private Long medicineId;
 
 
